@@ -1,0 +1,5 @@
+[cmpt371_analytics_backend]
+138.197.161.129 ansible_port=50022 ansible_user=runner
+
+[cmpt371_analytics_elasticsearch]
+138.197.147.215 ansible_port=50022 ansible_user=runner

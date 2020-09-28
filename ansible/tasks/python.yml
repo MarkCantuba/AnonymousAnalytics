@@ -1,0 +1,56 @@
+- name: Allow all permissions for /opt
+  become: yes
+  file:
+    path: /opt
+    state: directory
+    mode: 0777
+- name: Add PPA for the latest Git
+  become: yes
+  apt_repository:
+    repo: ppa:git-core/ppa
+- name: Install git and python build dependencies
+  become: yes
+  apt:
+    update_cache: yes
+    install_recommends: no
+    package:
+      - git
+      - make
+      - build-essential
+      - libssl-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - wget
+      - curl
+      - llvm
+      - libncurses5-dev
+      - xz-utils
+      - tk-dev
+      - libxml2-dev
+      - libxmlsec1-dev
+      - libffi-dev
+      - liblzma-dev
+- name: Get the latest pyenv
+  git:
+    repo: https://github.com/pyenv/pyenv.git
+    dest: /opt/pyenv
+    update: yes
+- name: Ensure pyenv init sources
+  copy:
+    dest: ~/.pyenv_init
+    content: |+2
+      export PYENV_ROOT="/opt/pyenv"
+      export PATH="$PYENV_ROOT/bin:$PATH"
+      if command -v pyenv 1>/dev/null 2>&1; then
+        eval "$(pyenv init -)"
+      fi
+- name: Load pyenv init in bash
+  lineinfile:
+    path: ~/.bashrc
+    line: source ~/.pyenv_init
+- name: Install python 3.8.6 under pyenv
+  shell:
+    cmd: source ~/.pyenv_init && /opt/pyenv/bin/pyenv install -s 3.8.6
+    executable: /bin/bash

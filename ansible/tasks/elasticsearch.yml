@@ -1,0 +1,24 @@
+- name: Install global pip3
+  become: yes
+  apt:
+    update-cache: yes
+    package:
+      - python3-pip
+- name: Add runner to docker group
+  become: yes
+  user:
+    name: runner
+    groups: docker
+# The first time running tasks may fail at docker pull, but the second time it would be good.
+# The user privilege may not have been refreshed, try open a new SSH session.
+# **NEEDS VERIFICATION**
+- name: Refresh user permissions
+  meta: reset_connection
+- name: Install docker python dependency
+  pip:
+    name: docker
+    executable: /usr/bin/pip3
+- name: Pull Elasticsearch docker image
+  community.general.docker_image:
+    name: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+    source: pull

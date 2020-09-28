@@ -1,0 +1,6 @@
+- hosts: cmpt371_analytics_backend
+  remote_user: runner
+  tasks:
+  - debug: var=ansible_hostname
+  - include_tasks: tasks/users.yml
+  - include_tasks: tasks/python.yml
