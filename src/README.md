@@ -39,6 +39,8 @@ Follow download and install guide on [elasticsearch website](https://www.elastic
 - Run elasticsearch
     - Windows: [Run from archive `.zip`](https://www.elastic.co/guide/en/elasticsearch/reference/current/starting-elasticsearch.html#start-zip)
     - macOS or Linux: [Run from archive `.tar.gz`](https://www.elastic.co/guide/en/elasticsearch/reference/current/starting-elasticsearch.html#start-targz)
+    - **The terminal used for running elasticsearch will be used exclusively by elasticsearch to output logs,** open a new terminal to perform the following steps
+    - `control-C` can be pressed to stop elasticsearch, but do not stop it now
 - Run local backend server
     - Change to project `src` directory
     - `uvicorn --port 8080 --reload main:app`
