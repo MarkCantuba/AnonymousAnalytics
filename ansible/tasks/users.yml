@@ -1,0 +1,16 @@
+- name: Ensure groups 'cmpt371build', 'cmpt371dev'
+  become: yes
+  group:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - 'cmpt371build'
+    - 'cmpt371dev'
+- name: Ensure users 'build', 'dev'
+  become: yes
+  user:
+    name: "{{ item.name }}"
+    group: "{{ item.group }}"
+  loop:
+    - { name: "build", group: "cmpt371build" }
+    - { name: "dev", group: "cmpt371dev" }

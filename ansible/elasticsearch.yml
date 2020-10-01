@@ -1,0 +1,7 @@
+- hosts: cmpt371_analytics_elasticsearch
+  remote_user: runner
+  tasks:
+  - debug: var=ansible_hostname
+  - include_tasks: tasks/users.yml
+  - include_tasks: tasks/docker.yml
+  - include_tasks: tasks/elasticsearch.yml
