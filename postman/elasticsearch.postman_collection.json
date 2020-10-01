@@ -11,7 +11,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://{{server_host}}/info",
+					"protocol": "http",
+					"host": [
+						"{{server_host}}"
+					],
+					"path": [
+						"info"
+					]
 				}
 			},
 			"response": []
@@ -41,7 +48,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://{{server_host}}/index/{{index_name}}/{{doc_id}}",
+					"protocol": "http",
+					"host": [
+						"{{server_host}}"
+					],
+					"path": [
+						"index",
+						"{{index_name}}",
+						"{{doc_id}}"
+					]
 				}
 			},
 			"response": []

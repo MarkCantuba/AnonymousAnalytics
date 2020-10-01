@@ -54,10 +54,12 @@ Follow download and install guide on [elasticsearch website](https://www.elastic
     - [Download postman](https://www.postman.com/downloads/)
     - Import project `postman` folder, open "elasticsearch" collection and check "local" environment
         - Environment is on top right, click on "eyes" icon to show values of variables
-    - Run "Post Doc"
+        - Whenever postman collection is updated, delete local environment and collection, then re-import the folder
+    - Navigate to "elasticsearch" collection on the left
+    - Go to "Post Doc" API, press "Send"
         - Response should be 200 with a JSON body
         - Copy the `_id` field in JSON into current value of local environment `doc_id` field
-    - Run "Get Index" and "Get Doc"
+    - Go to "Get Index" API, press "Send"
         - Response should be both 200 with a JSON body
         - Previous message stored in elasticsearch should appear
 
