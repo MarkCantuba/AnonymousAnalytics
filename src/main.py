@@ -39,7 +39,7 @@ async def post_doc(index_name: str, doc: NewDoc):
     except Exception as e:
         return str(e)
 
-@app.post("/{project_name}/event/")
+@app.post("/{project_name}/")
 async def post_doc(project_name: str, new_event: Event):
     try:
         return await es.index(project_name, new_event.dict())
