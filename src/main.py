@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse
 from elasticsearch import AsyncElasticsearch
 
 import config
-from models import NewDoc
+from models import *
 
 conf = config.get()
 app = FastAPI()
@@ -36,5 +36,12 @@ async def get_doc(index_name: str, doc_id: str):
 async def post_doc(index_name: str, doc: NewDoc):
     try:
         return await es.index(index_name, doc.content)
+    except Exception as e:
+        return str(e)
+
+@app.post("/{project_name}/event/")
+async def post_doc(project_name: str, new_event: Event):
+    try:
+        return await es.index(project_name, new_event.dict())
     except Exception as e:
         return str(e)
