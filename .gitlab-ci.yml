@@ -1,6 +1,6 @@
 Test1:
      tags:
-      -ci-regression
+      - ci-regression
      script:
       - python.exe /src/config.py
       - python.exe /src/models.py
