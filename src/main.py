@@ -39,14 +39,14 @@ async def post_doc(index_name: str, doc: NewDoc):
     except Exception as e:
         return str(e)
 
-@app.put("/{index_name}/")
+@app.put("/projects/{index_name}/")
 async def put_doc(index_name: str, request_body: dict):
     try:
         return await es.indices.create(index_name, request_body)
     except Exception as e:
         return str(e)
 
-@app.post("/{project_name}/")
+@app.post("/projects/{project_name}/")
 async def post_doc(project_name: str, new_event: Event):
     try:
         return await es.index(project_name, new_event.dict())
