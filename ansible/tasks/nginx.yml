@@ -1,0 +1,14 @@
+- name: Add NGINX GPG key
+  become: yes
+  apt_key:
+    url: https://nginx.org/keys/nginx_signing.key
+- name: Add apt repository for latest NGINX
+  become: yes
+  apt_repository:
+    repo: deb http://nginx.org/packages/mainline/ubuntu {{ ansible_lsb.codename }} nginx
+- name: Install NGINX
+  become: yes
+  apt:
+    update_cache: yes
+    package:
+      - nginx

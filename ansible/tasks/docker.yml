@@ -1,13 +1,3 @@
-- name: Install apt HTTPS dependencies
-  become: yes
-  apt:
-    update_cache: yes
-    package:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - gnupg-agent
-      - software-properties-common
 - name: Add Docker GPG key
   become: yes
   apt_key:

@@ -2,7 +2,6 @@ import os
 
 from typing import Optional
 from fastapi import Depends, FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from elasticsearch import AsyncElasticsearch
 
@@ -14,8 +13,6 @@ app = FastAPI()
 es = AsyncElasticsearch([
     { 'host': conf['elasticsearch']['private_ip'], 'port': conf['elasticsearch']['rest-port'] }
 ])
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/info")
 async def info():
