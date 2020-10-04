@@ -45,8 +45,6 @@ Follow download and install guide on [elasticsearch website](https://www.elastic
     - Change to project `src` directory
     - `uvicorn --port 8080 --reload main:app`
 - Verify application is running
-    - Open http://localhost:8080/static/hello-world.html in browser
-        - An HTML page with a grey and monospace font of "Hello World!" should appear
     - Open http://localhost:8080/docs in browser
         - A swagger-ui API documentation page should appear
 - Verify application is working with elasticsearch
