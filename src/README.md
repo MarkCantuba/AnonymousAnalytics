@@ -24,7 +24,6 @@ Run commands below in a terminal:
 $ pip install fastapi
 $ pip install uvicorn
 $ pip install elasticsearch[async]
-$ pip install aiofiles
 ```
 
 ### Datastore
