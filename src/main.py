@@ -32,22 +32,26 @@ async def get_doc(index_name: str, doc_id: str):
     except Exception as e:
         return str(e)
 
-@app.post("/index/{index_name}")
-async def post_doc(index_name: str, doc: NewDoc):
+# @app.post("/index/{index_name}")
+# async def post_doc(index_name: str, doc: NewDoc):
+#     try:
+#         return await es.index(index_name, doc.content)
+#     except Exception as e:
+#         return str(e)
+
+
+#TODO: Instead of requesting an optional set of settings in request body, add a way to do this in front end then process in the backend.
+@app.post("/projects")
+async def post_project(project: Project):
     try:
-        return await es.index(index_name, doc.content)
+        return await es.indices.create(project.project_name, dict())
     except Exception as e:
         return str(e)
 
-@app.put("/projects/{index_name}/")
-async def put_doc(index_name: str, request_body: dict):
-    try:
-        return await es.indices.create(index_name, request_body)
-    except Exception as e:
-        return str(e)
 
-@app.post("/projects/{project_name}/")
-async def post_doc(project_name: str, new_event: Event):
+#TODO: Add way to process exceptions when trying to insert event to a non-existing index. 500 maybe?
+@app.post("/projects/{project_name}/events/")
+async def post_event_to_project(project_name: str, new_event: Event):
     try:
         return await es.index(project_name, new_event.dict())
     except Exception as e:
