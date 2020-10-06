@@ -1,0 +1,6 @@
+Test1:
+     tags:
+      - ci-regression
+     script:
+      - python.exe C:/cmpt371/src/config.py
+      - python.exe C:/cmpt371/src/models.py
