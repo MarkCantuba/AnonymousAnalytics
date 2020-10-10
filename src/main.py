@@ -41,3 +41,25 @@ async def post_event_to_project(project_name: str, event: dict):
         })
     except Exception as e:
         raise ElasticInternalError() from e
+
+
+@app.get("/projects/{project_name}/events")
+async def get_events_by_timestamp(project_name: str,
+                                  start: datetime = datetime.now(timezone.utc) - timedelta(days=7),
+                                  end: datetime = datetime.now(timezone.utc)):
+    try:
+        request_body = {
+            "query": {
+                "range": {
+                    "timestamp": {
+                        "gte": start.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "lte": end.strftime("%Y-%m-%dT%H:%M:%SZ")
+                    }
+                }
+            }
+        }
+
+        return await es.search(index=project_name, body=request_body)
+
+    except Exception as e:
+        return str(e)
