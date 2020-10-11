@@ -69,7 +69,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"content\": \"{\\\"msg\\\": \\\"Hello, World!\\\"}\"\r\n}",
+					"raw": "{\r\n    \"event\": {\r\n        \"sessionTimestamp\": 1601833433061,\r\n        \"appVersion\": \"1.7.6\",\r\n        \"sessionDuration\": 0,\r\n        \"countryISO\": \"IN\",\r\n        \"eventName\": \"Flurry.EmptySession\",\r\n        \"eventOffset\": 0,\r\n        \"eventParameters\": {},\r\n        \"sessionProperties\": {},\r\n        \"firstSessionTimestamp\": 1601833433061,\r\n        \"userProperties\": []\r\n    },\r\n    \"server_timestamp\": \"2020-10-10T08:15:24.935499+00:00\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

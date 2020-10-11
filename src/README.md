@@ -1,6 +1,6 @@
 # Development Guide
 
-This folder contain all sources for development.
+This folder contain all sources for backend development.
 
 ## Dev Environment Setup
 
@@ -59,11 +59,9 @@ Follow download and install guide on [elasticsearch website](https://www.elastic
     - Go to "Get Index" API, press "Send"
         - Response should be both 200 with a JSON body
         - Previous message stored in elasticsearch should appear
+    - Reference to project `postman` folder for more documentation
 
 ## Future Goals
 
-- **Frontend**
-- Figure out elasticsearch concepts
 - **Separate APIs into different modules**
-- API versioning
-- Configure routing with static files
+- Add user authorization
