@@ -5,12 +5,7 @@ from elasticsearch import AsyncElasticsearch
 from fastapi import FastAPI
 
 import config
-<<<<<<< HEAD
 from exceptions import *
-=======
-import pytz
-
->>>>>>> b386624... In get Events part, add time zone validation for start&end value
 from models import *
 
 conf = config.get()
