@@ -2,8 +2,8 @@
     "elasticsearch": {
         "public_ip": "138.197.147.215",
         "private_ip": "10.118.0.2",
-        "rest-port": 59200,
-        "node-port": 59300
+        "rest_port": 59200,
+        "node_port": 59300
 
     },
     "backend": {

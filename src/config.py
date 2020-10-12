@@ -3,6 +3,7 @@ from functools import lru_cache
 import json
 import os
 
+
 # Load config only once
 @lru_cache()
 def get():

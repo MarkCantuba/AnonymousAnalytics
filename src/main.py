@@ -1,40 +1,43 @@
-import os
+from datetime import datetime, timezone
+from typing import Dict
 
-from typing import Optional
-from fastapi import Depends, FastAPI
-from fastapi.responses import HTMLResponse
 from elasticsearch import AsyncElasticsearch
+from fastapi import FastAPI
 
 import config
-from models import NewDoc
+from exceptions import *
+from models import *
 
 conf = config.get()
 app = FastAPI()
 es = AsyncElasticsearch([
-    { 'host': conf['elasticsearch']['private_ip'], 'port': conf['elasticsearch']['rest-port'] }
+    {
+        'host': conf['elasticsearch']['private_ip'],
+        'port': conf['elasticsearch']['rest_port']
+    }
 ])
 
-@app.get("/info")
-async def info():
-    return await es.info()
 
-@app.get("/index/{index_name}")
-async def get_index(index_name: str):
-    try:
-        return await es.search(index=index_name)
-    except Exception as e:
-        return str(e)
+@app.post("/projects")
+async def post_project(project: Project):
+    if await es.indices.exists(index=project.project_name):
+        raise ElasticIndexExists(project.project_name)
 
-@app.get("/index/{index_name}/{doc_id}")
-async def get_doc(index_name: str, doc_id: str):
     try:
-        return await es.get(index_name, doc_id)
+        return await es.indices.create(project.project_name, dict())
     except Exception as e:
-        return str(e)
+        raise ElasticInternalError() from e
 
-@app.post("/index/{index_name}")
-async def post_doc(index_name: str, doc: NewDoc):
+
+@app.post("/projects/{project_name}/events")
+async def post_event_to_project(project_name: str, event: dict):
+    if not await es.indices.exists(index=project_name):
+        raise ElasticIndexNotFound(project_name)
+
     try:
-        return await es.index(index_name, doc.content)
+        return await es.index(project_name, {
+            'server_timestamp': datetime.now(timezone.utc),
+            'event': event
+        })
     except Exception as e:
-        return str(e)
+        raise ElasticInternalError() from e
