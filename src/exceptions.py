@@ -29,3 +29,13 @@ class ElasticInternalError(HTTPException):
             "status_code": 500,
             "msg": "Elasticsearch has returned an error from the request"
         }
+
+
+class BadRequest(HTTPException):
+    def __init__(self, msg: str):
+        self.status_code = 400
+
+        self.detail = {
+            "status_code": 400,
+            "msg": msg
+        }
