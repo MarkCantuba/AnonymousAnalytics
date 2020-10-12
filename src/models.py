@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-import datetime as dt
 
 
 class NewDoc(BaseModel):
@@ -8,7 +7,3 @@ class NewDoc(BaseModel):
 
 class Project(BaseModel):
     project_name: str
-
-
-class Event(BaseModel):
-    doc: dict

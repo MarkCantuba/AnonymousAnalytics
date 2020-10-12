@@ -1,23 +1,31 @@
 from fastapi import HTTPException
 
 
-class HTTPElasticIndexExists(HTTPException):
-    def __init__(self, project_name: str, status_code: int = 404, message: str = "Given index already exists!"):
-        self.status_code = status_code
+class ElasticIndexExists(HTTPException):
+    def __init__(self, project_name: str):
+        self.status_code = 409
 
         self.detail = {
-            "Status Code": status_code,
-            "Project Name": project_name,
-            "Error Message": message
+            "status_code": 409,
+            "msg": "Given project {} already exists".format(project_name)
         }
 
 
-class HTTPElasticIndexDoesntExists(HTTPException):
-    def __init__(self, project_name: str, status_code: int = 501, message: str = "Given index does not exists!"):
-        self.status_code = status_code
+class ElasticIndexNotFound(HTTPException):
+    def __init__(self, project_name: str):
+        self.status_code = 404
 
         self.detail = {
-            "Status Code": status_code,
-            "Project Name": project_name,
-            "Error Message": message
+            "status_code": 404,
+            "msg": "Given project {} does not exist".format(project_name)
+        }
+
+
+class ElasticInternalError(HTTPException):
+    def __init__(self):
+        self.status_code = 500
+
+        self.detail = {
+            "status_code": 500,
+            "msg": "Elasticsearch has returned an error from the request"
         }
