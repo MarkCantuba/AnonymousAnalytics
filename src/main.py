@@ -1,11 +1,15 @@
 import os
+import config
 
 from typing import Optional
-from fastapi import Depends, FastAPI
+
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
+
 from elasticsearch import AsyncElasticsearch
 
-import config
+from exceptions import *
+
 from models import *
 
 conf = config.get()
@@ -40,18 +44,23 @@ async def get_doc(index_name: str, doc_id: str):
 #         return str(e)
 
 
-#TODO: Instead of requesting an optional set of settings in request body, add a way to do this in front end then process in the backend.
+
 @app.post("/projects")
 async def post_project(project: Project):
+    if await es.indices.exists(index=project.project_name):
+        raise HTTPElasticIndexExists(project.project_name)
+
     try:
         return await es.indices.create(project.project_name, dict())
     except Exception as e:
-        return str(e)
+        return e
 
 
-#TODO: Add way to process exceptions when trying to insert event to a non-existing index. 500 maybe?
 @app.post("/projects/{project_name}/events/")
 async def post_event_to_project(project_name: str, new_event: Event):
+    if not await es.indices.exists(index=project_name):
+        raise HTTPElasticIndexDoesntExists(project_name)
+
     try:
         return await es.index(project_name, new_event.dict())
     except Exception as e:
