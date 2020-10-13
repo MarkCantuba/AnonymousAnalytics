@@ -10,5 +10,6 @@
         "public_ip": "138.197.161.129",
         "private_ip": "10.118.0.3",
         "port": 50080
-    }
+    },
+    "enable_cors": true
 }
