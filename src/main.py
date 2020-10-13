@@ -30,15 +30,12 @@ async def post_project(project: Project):
 
 
 @app.post("/projects/{project_name}/events")
-async def post_event_to_project(project_name: str, event: dict):
+async def post_event_to_project(project_name: str, event: Event):
     if not await es.indices.exists(index=project_name):
         raise ElasticIndexNotFound(project_name)
 
     try:
-        return await es.index(project_name, {
-            "server_timestamp": datetime.now(timezone.utc),
-            "event": event
-        })
+        return await es.index(project_name, event.json())
     except Exception as e:
         raise ElasticInternalError() from e
 
