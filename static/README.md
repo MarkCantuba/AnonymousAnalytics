@@ -27,6 +27,8 @@ Usually, the dataset on integration environment should be more comprehensive to 
 
 - To test with a specific environment, add an environment string to the `APIService` instance
     - Change `const API_SERVICE = new APIService();` on the last line to `const API_SERVICE = new APIService('INTEGRATION'); // or 'DEV'`
+        - `DEV` is optional, but if used, local backend is required
+        - Reference to backend development guide under `<project_root>/src` to setup a backend
     - **Make sure to revert this change before any commit to git**, so it won't mess up integration frontend
 - In browser, go to `http://localhost/welcome.html`, and then click on the link
     - If API request succeeds, there should be a bar graph showing some dummy data
