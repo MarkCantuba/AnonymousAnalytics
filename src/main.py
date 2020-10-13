@@ -45,9 +45,9 @@ async def post_event_to_project(project_name: str, event: dict):
 
 @app.get("/projects/{project_name}/events")
 async def get_events_by_timestamp(
-    project_name: str,
-    start: Optional[datetime] = Query(datetime.now(timezone.utc) - timedelta(days=7)),
-    end: Optional[datetime] = Query(datetime.now(timezone.utc))
+        project_name: str,
+        start: Optional[datetime] = Query(datetime.now(timezone.utc) - timedelta(days=7)),
+        end: Optional[datetime] = Query(datetime.now(timezone.utc))
 ):
     # validate start & end when they are not given as default value
     if start.tzinfo != timezone.utc:
@@ -61,7 +61,7 @@ async def get_events_by_timestamp(
         request_body = {
             "query": {
                 "range": {
-                    "timestamp": {
+                    "server_timestamp": {
                         "gte": start,
                         "lte": end
                     }
