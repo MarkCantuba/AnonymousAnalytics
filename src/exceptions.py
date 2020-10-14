@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from datetime import datetime
 
 
 class ElasticIndexExists(HTTPException):
@@ -21,21 +22,21 @@ class ElasticIndexNotFound(HTTPException):
         }
 
 
-class ElasticInternalError(HTTPException):
-    def __init__(self):
-        self.status_code = 500
-
-        self.detail = {
-            "status_code": 500,
-            "msg": "Elasticsearch has returned an error from the request"
-        }
-
-
-class BadRequest(HTTPException):
-    def __init__(self, msg: str):
+class InvalidTimestamp(HTTPException):
+    def __init__(self, time: datetime):
         self.status_code = 400
 
         self.detail = {
             "status_code": 400,
-            "msg": msg
+            "msg": "Datetime {} has wrong timezone. Use UTC instead.".format(time)
+        }
+
+
+class InvalidRange(HTTPException):
+    def __init__(self):
+        self.status_code = 400
+
+        self.detail = {
+            "status_code": 400,
+            "msg": "Invalid Range: Start range cannot be greater than the End range!"
         }
