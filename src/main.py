@@ -27,7 +27,7 @@ async def post_project(project: Project):
     try:
         return await es.indices.create(project.project_name, dict())
     except Exception as e:
-        raise e
+        return e
 
 
 @app.post("/projects/{project_name}/events")
@@ -38,7 +38,7 @@ async def post_event_to_project(project_name: str, event: Event):
     try:
         return await es.index(project_name, event.json())
     except Exception as e:
-        raise e
+        return e
 
 
 @app.get("/projects/{project_name}/events")
@@ -49,4 +49,4 @@ async def get_events_by_timestamp(project_name: str, start: Optional[datetime] =
         return await query_event_by_timestamp(es, project_name, start, end)
 
     except Exception as e:
-        raise e
+        return e
