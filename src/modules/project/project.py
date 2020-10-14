@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from elasticsearch import AsyncElasticsearch
-from exceptions import ElasticInvalidStrEndRange, ElasticInvalidTimeStamp
+from exceptions import *
 
 
 def query_event_by_timestamp(elastic_sess: AsyncElasticsearch, project_name: str, start: datetime, end: datetime):
@@ -16,11 +16,11 @@ def query_event_by_timestamp(elastic_sess: AsyncElasticsearch, project_name: str
             end = datetime.now().replace(tzinfo=timezone.utc)
 
     if start > end:
-        raise ElasticInvalidStrEndRange()
+        raise InvalidRange()
     if start.tzinfo != timezone.utc:
-        raise ElasticInvalidTimeStamp(start)
+        raise InvalidTimeStamp(start)
     if end.tzinfo != timezone.utc:
-        raise ElasticInvalidTimeStamp(end)
+        raise InvalidTimeStamp(end)
 
     request_body = {
         "query": {

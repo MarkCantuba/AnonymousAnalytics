@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from datetime import datetime
 
+
 class ElasticIndexExists(HTTPException):
     def __init__(self, project_name: str):
         self.status_code = 409
@@ -21,7 +22,7 @@ class ElasticIndexNotFound(HTTPException):
         }
 
 
-class ElasticInvalidTimeStamp(HTTPException):
+class InvalidTimeStamp(HTTPException):
     def __init__(self, time: datetime):
         self.status_code = 400
 
@@ -31,11 +32,11 @@ class ElasticInvalidTimeStamp(HTTPException):
         }
 
 
-class ElasticInvalidStrEndRange(HTTPException):
+class InvalidRange(HTTPException):
     def __init__(self):
         self.status_code = 400
 
         self.detail = {
             "status_code": 400,
-            "msg": "Invalid date range: Start date cannot be greater than End date!"
+            "msg": "Invalid Range: Start range cannot be greater than the End range!"
         }
