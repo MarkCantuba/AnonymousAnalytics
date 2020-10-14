@@ -1,0 +1,26 @@
+:root {
+    --text-color: #223355;
+    --text-highlight-color: #3F5F9E;
+    --text-secondary-color: #314979;
+}
+
+h1, h2 {
+    margin: 10px;
+    font-family: 'Consolas', 'Courier New', Courier, monospace;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:link, a:visited {
+    color: var(--text-color);
+}
+
+a:hover {
+    color: var(--text-highlight-color);
+}
+
+a:active {
+    color: var(--text-secondary-color);
+}

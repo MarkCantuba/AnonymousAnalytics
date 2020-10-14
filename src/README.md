@@ -1,8 +1,8 @@
-# Development Guide
+# Backend Development Guide
 
-This folder contain all sources for backend development.
+This directory contain all source code for backend development.
 
-## Dev Environment Setup
+## Backend Environment Setup
 
 Overall, there are two components required:
 - Backend: FastAPI, and underlying python 3
@@ -30,7 +30,7 @@ $ pip install elasticsearch[async]
 
 Follow download and install guide on [elasticsearch website](https://www.elastic.co/downloads/elasticsearch).
 - Do not put unzipped elasticsearch directory under a path with spaces on Windows, or `elasticsearch.bat` file will complain.
-    - `C:\elasticsearch` is a safe and easy place.
+    - On Windows, `C:\elasticsearch` is a safe and easy place.
 - Install elasticsearch as a service is _not_ necessary. Run elasticsearch while developing the project is sufficient.
 
 ## Run Application
@@ -41,7 +41,7 @@ Follow download and install guide on [elasticsearch website](https://www.elastic
     - **The terminal used for running elasticsearch will be used exclusively by elasticsearch to output logs,** open a new terminal to perform the following steps
     - `control-C` can be pressed to stop elasticsearch, but do not stop it now
 - Run local backend server
-    - Change to project `src` directory
+    - Change to `<project_root>/src` directory
     - `uvicorn --port 8080 --reload main:app`
 - Verify application is running
     - Open http://localhost:8080/docs in browser
@@ -49,7 +49,7 @@ Follow download and install guide on [elasticsearch website](https://www.elastic
 - Verify application is working with elasticsearch
     - Postman: An API testing tool
     - [Download postman](https://www.postman.com/downloads/)
-    - Import project `postman` folder, open "elasticsearch" collection and check "local" environment
+    - Import `<project_root>/postman` folder, open "elasticsearch" collection and check "local" environment
         - Environment is on top right, click on "eyes" icon to show values of variables
         - Whenever postman collection is updated, delete local environment and collection, then re-import the folder
     - Navigate to "elasticsearch" collection on the left
@@ -59,7 +59,7 @@ Follow download and install guide on [elasticsearch website](https://www.elastic
     - Go to "Get Index" API, press "Send"
         - Response should be both 200 with a JSON body
         - Previous message stored in elasticsearch should appear
-    - Reference to project `postman` folder for more documentation
+    - Reference to `<project_root>/postman` directory for more documentation
 
 ## Future Goals
 
