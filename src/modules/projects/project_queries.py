@@ -1,5 +1,3 @@
-import pytz
-
 from datetime import datetime, timedelta, timezone
 from elasticsearch import AsyncElasticsearch
 from exceptions import ElasticInvalidStrEndRange, ElasticInvalidTimeStamp

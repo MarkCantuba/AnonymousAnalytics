@@ -1,14 +1,13 @@
-from datetime import datetime, timezone, timedelta
 from typing import Optional
 
 from elasticsearch import AsyncElasticsearch
-from fastapi import FastAPI, Query
+from fastapi import FastAPI
 
 import config
 
 from exceptions import *
 from models import *
-from queries import *
+from modules.projects.project_queries import *
 
 conf = config.get()
 app = FastAPI()
