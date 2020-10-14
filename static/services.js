@@ -33,4 +33,4 @@ class APIService {
     }
 }
 
-const API_SERVICE = new APIService('DEV');
+const API_SERVICE = new APIService();
