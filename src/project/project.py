@@ -14,7 +14,7 @@ def query_event_by_timestamp(elastic_sess: AsyncElasticsearch, project_name: str
     request_body = {
         "query": {
             "range": {
-                "timestamp": {
+                "server_timestamp": {
                     "gte": start,
                     "lte": end
                 }
