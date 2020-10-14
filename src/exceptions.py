@@ -22,7 +22,7 @@ class ElasticIndexNotFound(HTTPException):
         }
 
 
-class InvalidTimeStamp(HTTPException):
+class InvalidTimestamp(HTTPException):
     def __init__(self, time: datetime):
         self.status_code = 400
 
