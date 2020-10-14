@@ -12,6 +12,19 @@ from project.project import query_event_by_timestamp
 
 conf = config.get()
 app = FastAPI()
+
+if conf["enable_cors"]:
+    from fastapi.middleware.cors import CORSMiddleware
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "OPTIONS", "PUT", "DELETE", "PATCH"],
+        allow_headers=["*"],
+        expose_headers=["*"]
+    )
+
 es = AsyncElasticsearch([
     {
         "host": conf["elasticsearch"]["private_ip"],
