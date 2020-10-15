@@ -1,6 +1,51 @@
-Test1:
-     tags:
-      - ci-regression
-     script:
-      - python.exe C:/cmpt371/src/config.py
-      - python.exe C:/cmpt371/src/models.py
+# Based on the size of our project, we chose Basic Pipelines as the architectue, 
+# However, Directed Acyclic Graph Pipelines (DAG) or Child / Parent Pipelines will be considerred is the size of the project changes.
+
+stages:
+  - build
+  - test
+  - deploy
+
+# image: docker image? 
+# Where is the docker image? (elasticsearch server?)
+
+build_full:
+  tags: building
+  stage: build
+  script: #actual commands need to be determined and formalize here
+    - echo "Full build of the current dev statges."
+
+# Is the below step necessary?
+# build_on_top_full:
+#   stage: build
+#   script: #actual commands need to be determined and formalize here 
+#     - echo "Additional builds to catch missing details"
+
+test_unit:
+  tags: testing
+  stage: test
+  script: #actual commands need to be determined and formalize here 
+    - echo "Once all builds in build stage complete,"
+    - echo "Start unit test after succefull build."
+
+test_integration:
+  tags: testing
+  stage: test
+  script: #actual commands need to be determined and formalize here 
+    - echo "Once unit tests complete,"
+    - echo "Start integration test after all unit tests passed."
+
+# Is the below step necessary?
+# deploy_test_production:
+#   tags: production
+#   stage: deploy
+#   script: #actual commands need to be determined and formalize here 
+#     - echo "Once integration test passed,"
+#     - echo "Start test production."
+
+deploy_prodcution:
+  tags: production
+  stage: deploy
+  script: #actual commands need to be determined and formalize here 
+    - echo "Once integration test passed,"
+    - echo "Start production."
