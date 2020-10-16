@@ -10,7 +10,7 @@ import re
 
 from models import *
 from exceptions import *
-from project.project import query_event_by_timestamp
+from project.project import *
 
 conf = config.get()
 app = FastAPI()
@@ -38,10 +38,15 @@ es = AsyncElasticsearch([
 @app.post("/projects")
 async def post_project(project: Project):
     # validate project_id
+
+    id_len_bytes = get_len_bytes(project.id)
+    if id_len_bytes > 512:
+        raise InvalidProjectID(project.id,"document ID is too long, should be longer than 512 bytes")
     pattern = '^[0-9a-z]+[0-9a-z\.\-_]*$'
     id_pass = re.match(pattern, project.id)
     if not id_pass:
-        raise InvalidProjectID(project.id)
+        raise InvalidProjectID(project.id,
+                "only lowercase letter, number, dash, underscore are allowed, cannot start with a dash or underscore")
     if await es.indices.exists(index=project.id):
         raise ElasticIndexExists(project.id)
 
