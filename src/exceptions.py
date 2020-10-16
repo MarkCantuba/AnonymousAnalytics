@@ -44,10 +44,10 @@ class InvalidRange(HTTPException):
 
 
 class ElasticNoIndexFound(HTTPException):
-    def __init__(self):
+    def __init__(self, index):
         self.status_code = 404
 
         self.detail = {
             "status_code": 404,
-            "msg": "There is no project found"
+            "msg": "index: {} does not exist".format(index)
         }

@@ -55,9 +55,9 @@ async def post_project(*, project: Project):
 
 @app.get("/projects")
 async def get_all_projects():
-    res = await es.search(index='*', filter_path=['hits.hits._source'])
+    res = await es.search(index='.projects', filter_path=['hits.hits._source'])
     if not res:
-        raise ElasticNoIndexFound()
+        raise ElasticNoIndexFound('.projects')
     return res['hits']['hits']
 
 
