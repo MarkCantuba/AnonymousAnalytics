@@ -6,6 +6,8 @@ from fastapi import FastAPI, Query
 
 import config
 
+import re
+
 from models import *
 from exceptions import *
 from project.project import query_event_by_timestamp
@@ -35,12 +37,22 @@ es = AsyncElasticsearch([
 
 @app.post("/projects")
 async def post_project(project: Project):
+    # validate project_id
+    pattern = '^[0-9a-z]+[0-9a-z\.\-_]*$'
+    id_pass = re.match(pattern, project.id)
+    if not id_pass:
+        raise InvalidProjectID(project.id)
     if await es.indices.exists(index=project.id):
         raise ElasticIndexExists(project.id)
-    project_body = {"id" : project.id,
-                    "name": project.name,
-                    "description": project.description}
-    return await es.index(index = project.id, body=project_body)
+
+    doc = {"id" : project.id,
+        "name": project.name,
+        "description": project.description}
+    
+    # add doc to .project
+    await es.create( index= '.projects', id = project.id, body = doc)
+    # create index
+    return await es.indices.create(project.id, dict())
 
 @app.post("/projects/{project_name}/events")
 async def post_event_to_project(project_name: str, event: dict):

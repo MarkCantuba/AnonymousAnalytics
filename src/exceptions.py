@@ -40,3 +40,14 @@ class InvalidRange(HTTPException):
             "status_code": 400,
             "msg": "Invalid Range: Start range cannot be greater than the End range!"
         }
+
+class InvalidProjectID(HTTPException):
+    def __init__(self,project_id):
+        self.status_code = 400
+
+        self.detail = {
+            "status_code": 400,
+            "msg": """Invalid project id {}: only lowercase letter, number, dash,
+                    underscore are allowed, cannot start with a dash or underscore """.format(project_id)
+        }
+
