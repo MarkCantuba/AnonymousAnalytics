@@ -6,7 +6,9 @@ class NewDoc(BaseModel):
 
 
 class Project(BaseModel):
-    project_name: str
+    id: str
+    name: str
+    description: str
 
 
 class Event(BaseModel):
