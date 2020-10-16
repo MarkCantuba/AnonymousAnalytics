@@ -43,7 +43,7 @@ async def post_project(*, project: Project):
     # add doc to .project
     # refresh the .projects index after creating the doc, so it is immediately searchable
     await es.create(
-        index='.projects', 
+        index='.projects',
         id=project.id,
         refresh=True,
         body=doc
@@ -56,6 +56,8 @@ async def post_project(*, project: Project):
 @app.get("/projects")
 async def get_all_projects():
     res = await es.search(index='*', filter_path=['hits.hits._source'])
+    if not res:
+        raise ElasticNoIndexFound()
     return res['hits']['hits']
 
 
