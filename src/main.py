@@ -60,19 +60,21 @@ async def get_all_projects():
     # check if the index .projects exists, raise 404 error if not
     if not await es.indices.exists(index='.projects'):
         raise ElasticIndexNotFound('.projects')
+    query_body = {
+        'query': {
+            'match_all': {}
+        },
+        'size': 100  # override the limit of number returned to 100
+    }
     res = await es.search(
         index='.projects',
         # project fields are stored in the _source of document
         # use filter_path to remove unrelavant document fileds and keep only the _source filed in a single hit
         filter_path=['hits.hits'],
-        # override the limit of number returned to 100
-        body={'query': {'match_all': {}}, 'size': 100})
+        body=query_body)
 
-    list_of_docs_source = res['hits']['hits']  # extract the content inside hits, a list of "_source" fileds
-    list_to_return = []
-    print(len(list_of_docs_source))
-    for i in range(len(list_of_docs_source)):
-        list_to_return.append(list_of_docs_source[i]['_source'])
+    list_of_docs = res['hits']['hits']  # extract the content (a list of documents) from res['hits']['hits']
+    list_to_return = [doc['_source'] for doc in list_of_docs]  # extract relevant data (the _source filed)
     return list_to_return
 
 
