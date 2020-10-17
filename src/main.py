@@ -39,23 +39,22 @@ es = AsyncElasticsearch([
 async def post_project(project: Project):
     # validate project_id
 
-    id_len_bytes = get_len_bytes(project.id)
-    if id_len_bytes > 512:
-        raise InvalidProjectID(project.id,"document ID is too long, should be longer than 512 bytes")
     pattern = '^[0-9a-z]+[0-9a-z\.\-_]*$'
     id_pass = re.match(pattern, project.id)
     if not id_pass:
         raise InvalidProjectID(project.id,
                 "only lowercase letter, number, dash, underscore are allowed, cannot start with a dash or underscore")
-    if await es.indices.exists(index=project.id):
+    # check the index .projects to see if a project has been created
+    if await es.exists(index=".projects", id=project.id):
         raise ElasticIndexExists(project.id)
 
-    doc = {"id" : project.id,
-        "name": project.name,
-        "description": project.description}
+    doc = project.dict()
     
     # add doc to .project
-    await es.create( index= '.projects', id = project.id, body = doc)
+    await es.create(index='.projects', 
+                    id=project.id,
+                    refresh=True, # refresh the .projects index after creating the doc, so it is immediately searchable
+                    body=doc)
     # create index
     return await es.indices.create(project.id, dict())
 

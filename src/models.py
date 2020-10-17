@@ -1,14 +1,17 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime, timezone
+from typing import Optional
 
 class NewDoc(BaseModel):
     content: str
 
 
 class Project(BaseModel):
-    id: str
+    id: str = Field(max_length=300)
     name: str
-    description: str
+    description: Optional[str] = Field(
+        None, title="The description of the project", max_length=300
+    )
 
 
 class Event(BaseModel):

@@ -24,6 +24,3 @@ def query_event_by_timestamp(elastic_sess: AsyncElasticsearch, project_name: str
 
     return elastic_sess.search(index=project_name, body=request_body)
 
-def get_len_bytes(a_string):
-    bytes_of_a_string = bytes(a_string, 'utf-8')
-    return len(bytes_of_a_string)
