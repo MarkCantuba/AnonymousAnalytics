@@ -38,13 +38,6 @@ es = AsyncElasticsearch([
 @app.post("/projects")
 async def post_project(project: Project):
     # validate project_id
-
-    pattern = '^[0-9a-z]+[0-9a-z\.\-_]*$'
-    id_pass = re.match(pattern, project.id)
-    if not id_pass:
-        raise InvalidProjectID(project.id,
-                "only lowercase letter, number, dash, underscore are allowed, cannot start with a dash or underscore")
-    # check the index .projects to see if a project has been created
     if await es.exists(index=".projects", id=project.id):
         raise ElasticIndexExists(project.id)
 
