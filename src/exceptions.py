@@ -13,12 +13,12 @@ class ElasticIndexExists(HTTPException):
 
 
 class ElasticIndexNotFound(HTTPException):
-    def __init__(self, project_name: str):
+    def __init__(self, index_name: str):
         self.status_code = 404
 
         self.detail = {
             "status_code": 404,
-            "msg": "Given project {} does not exist".format(project_name)
+            "msg": "index '{}' does not exist".format(index_name)
         }
 
 
