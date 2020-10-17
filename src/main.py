@@ -57,6 +57,9 @@ async def post_project(*, project: Project):
 # get all projects currently recorded
 # return a list of dictionaries, each dictionary contains all the fields (id, name, description) for one project.
 async def get_all_projects():
+    # check if the index .projects exists, raise 404 error if not
+    if not await es.indices.exists(index='.projects'):
+        raise ElasticIndexNotFound('.projects')
     res = await es.search(
         index='.projects',
         # project fields are stored in the _source of document
