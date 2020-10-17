@@ -35,7 +35,7 @@ es = AsyncElasticsearch([
 ])
 
 
-@app.post("/projects")
+@app.post("/projects", status_code=201)
 async def post_project(project: Project):
     # validate project_id
     if await es.exists(index=".projects", id=project.id):
@@ -49,7 +49,8 @@ async def post_project(project: Project):
                     refresh=True, # refresh the .projects index after creating the doc, so it is immediately searchable
                     body=doc)
     # create index
-    return await es.indices.create(project.id, dict())
+    await es.indices.create(project.id, dict())
+    return project.dict()
 
 @app.post("/projects/{project_name}/events")
 async def post_event_to_project(project_name: str, event: dict):
