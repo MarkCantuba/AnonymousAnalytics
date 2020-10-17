@@ -69,9 +69,8 @@ async def get_all_projects():
     res = await es.search(
         index='.projects',
         # project fields are stored in the _source of document
-        # use filter_path to remove unrelavant document fileds and keep only the _source filed in a single hit
-        filter_path=['hits.hits'],
-        body=query_body)
+        body=query_body
+    )
 
     list_of_docs = res['hits']['hits']  # extract the content (a list of documents) from res['hits']['hits']
     list_to_return = [doc['_source'] for doc in list_of_docs]  # extract relevant data (the _source filed)
