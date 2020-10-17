@@ -54,11 +54,23 @@ async def post_project(*, project: Project):
 
 
 @app.get("/projects")
+# get all projects currently recorded
+# return a list of dictionaries, each dictionary contains all the fields (id, name, description) for one project.
 async def get_all_projects():
-    res = await es.search(index='.projects', filter_path=['hits.hits._source'])
-    if not res:
-        raise ElasticNoIndexFound('.projects')
-    return res['hits']['hits']
+    res = await es.search(
+        index='.projects',
+        # project fields are stored in the _source of document
+        # use filter_path to remove irrelevant document fields and keep only the _source filed in a single hit
+        filter_path=['hits.hits']
+    )
+
+    list_of_docs_source = res['hits']['hits']  # extract the content inside hits, a list of "_source" fileds
+    list_to_return = []
+    for i in range(len(list_of_docs_source)):
+        if i >= 10:
+            break
+        list_to_return.append(list_of_docs_source[i]['_source'])
+    return list_to_return
 
 
 @app.post("/projects/{project_id}/events")
