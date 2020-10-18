@@ -7,7 +7,7 @@ class NewDoc(BaseModel):
 
 
 class Project(BaseModel):
-    id: str = Field(max_length=300, regex="^[0-9a-z]+[0-9a-z\\.\\-_]*$")
+    id: str = Field(max_length=300, regex=r"^[0-9a-z]+[0-9a-z\.\-_]*$")
     name: str
     description: Optional[str] = Field(
         None, title="The description of the project"

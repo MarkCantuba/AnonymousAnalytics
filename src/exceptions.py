@@ -40,5 +40,3 @@ class InvalidRange(HTTPException):
             "status_code": 400,
             "msg": "Invalid Range: Start range cannot be greater than the End range!"
         }
-
-

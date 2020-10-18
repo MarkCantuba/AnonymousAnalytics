@@ -8,6 +8,7 @@ import config
 
 import re
 
+from migration import *
 from models import *
 from exceptions import *
 from project.project import *
@@ -42,31 +43,31 @@ async def post_project(project: Project):
         raise ElasticIndexExists(project.id)
 
     doc = project.dict()
-    
+
     # add doc to .project
-    await es.create(index='.projects', 
+    await es.create(index='.projects',
                     id=project.id,
                     refresh=True, # refresh the .projects index after creating the doc, so it is immediately searchable
                     body=doc)
     # create index
-    await es.indices.create(project.id, dict())
+    await es.indices.create(project.id)
     return project.dict()
 
-@app.post("/projects/{project_name}/events")
-async def post_event_to_project(project_name: str, event: dict):
-    if not await es.indices.exists(index=project_name):
-        raise ElasticIndexNotFound(project_name)
+@app.post("/projects/{project_id}/events")
+async def post_event_to_project(project_id: str, event: dict):
+    if not await es.indices.exists(index=project_id):
+        raise ElasticIndexNotFound(project_id)
 
     new_event = Event(event=event)
 
-    return await es.index(project_name, new_event.json())
+    return await es.index(project_id, new_event.json())
 
 
-@app.get("/projects/{project_name}/events")
-async def get_events_by_timestamp(project_name: str,
+@app.get("/projects/{project_id}/events")
+async def get_events_by_timestamp(project_id: str,
                                   start: Optional[datetime] = Query(datetime.now(timezone.utc) - timedelta(days=7)),
                                   end: Optional[datetime] = Query(datetime.now(timezone.utc))):
-    if not await es.indices.exists(index=project_name):
-        raise ElasticIndexNotFound(project_name)
+    if not await es.indices.exists(index=project_id):
+        raise ElasticIndexNotFound(project_id)
 
-    return await query_event_by_timestamp(es, project_name, start, end)
+    return await query_event_by_timestamp(es, project_id, start, end)
