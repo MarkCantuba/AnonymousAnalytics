@@ -110,7 +110,7 @@ async def get_histogram_by_date_interval(project_name: str,
                                          start: Optional[datetime] = Query(
                                              datetime.now(timezone.utc) - timedelta(days=7)),
                                          end: Optional[datetime] = Query(datetime.now(timezone.utc)),
-                                         interval: Optional[int] = Query(21600)):
+                                         interval: Optional[int] = Query(21600, gt=0)):
 
     if not await es.indices.exists(index=project_name):
         raise ElasticIndexNotFound(project_name)
