@@ -60,7 +60,7 @@ async def get_all_projects():
     # check if the index .projects exists, raise 404 error if not
     if not await es.indices.exists(index='.projects'):
         raise ElasticIndexNotFound('.projects')
-    query_body = {
+    query = {
         'query': {
             'match_all': {}
         },
@@ -69,12 +69,12 @@ async def get_all_projects():
     res = await es.search(
         index='.projects',
         # project fields are stored in the _source of document
-        body=query_body
+        body=query
     )
 
-    list_of_docs = res['hits']['hits']  # extract the content (a list of documents) from res['hits']['hits']
-    list_to_return = [doc['_source'] for doc in list_of_docs]  # extract relevant data (the _source filed)
-    return list_to_return
+    # extract projects from res['hits']['hits'].source
+    projects = [doc['_source'] for doc in res['hits']['hits']]
+    return projects
 
 
 @app.post("/projects/{project_id}/events")
