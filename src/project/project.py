@@ -38,7 +38,7 @@ def query_histogram_by_date_interval(elastic_sess: AsyncElasticsearch, project_n
             "events_over_time": {
                 "date_histogram": {
                     "field": "server_timestamp",
-                    "interval": "{}s".format(interval)
+                    "fixed_interval": "{}s".format(interval)
                 }
             }
         },
