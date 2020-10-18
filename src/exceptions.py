@@ -1,5 +1,6 @@
-from fastapi import HTTPException
 from datetime import datetime
+
+from fastapi import HTTPException
 
 
 class ElasticIndexExists(HTTPException):

@@ -1,17 +1,10 @@
-from datetime import timedelta
-from typing import Optional
 import asyncio
 
-from elasticsearch import AsyncElasticsearch
 from fastapi import FastAPI, Query
 
 import config
-
-import re
-
 from migrations import *
 from models import *
-from exceptions import *
 from project.project import *
 
 conf = config.get()
@@ -40,7 +33,7 @@ if conf["enable_cors"]:
 
 
 @app.post("/projects", status_code=201)
-async def post_project(project: Project):
+async def post_project(*, project: Project):
     # validate project_id
     if await es.exists(index=".projects", id=project.id):
         raise ElasticIndexExists(project.id)
@@ -48,16 +41,24 @@ async def post_project(project: Project):
     doc = project.dict()
 
     # add doc to .project
-    await es.create(index='.projects',
-                    id=project.id,
-                    refresh=True, # refresh the .projects index after creating the doc, so it is immediately searchable
-                    body=doc)
+    # refresh the .projects index after creating the doc, so it is immediately searchable
+    await es.create(
+        index='.projects',
+        id=project.id,
+        refresh=True,
+        body=doc
+    )
     # create index
     await es.indices.create(project.id)
     return project.dict()
 
+
 @app.post("/projects/{project_id}/events")
-async def post_event_to_project(project_id: str, event: dict):
+async def post_event_to_project(
+        *,
+        project_id: str = ProjectId,
+        event: dict
+):
     if not await es.indices.exists(index=project_id):
         raise ElasticIndexNotFound(project_id)
 
@@ -67,9 +68,12 @@ async def post_event_to_project(project_id: str, event: dict):
 
 
 @app.get("/projects/{project_id}/events")
-async def get_events_by_timestamp(project_id: str,
-                                  start: Optional[datetime] = Query(datetime.now(timezone.utc) - timedelta(days=7)),
-                                  end: Optional[datetime] = Query(datetime.now(timezone.utc))):
+async def get_events_by_timestamp(
+        *,
+        project_id: str = ProjectId,
+        start: Optional[datetime] = Query(datetime.now(timezone.utc) - timedelta(days=7)),
+        end: Optional[datetime] = Query(datetime.now(timezone.utc))
+):
     if not await es.indices.exists(index=project_id):
         raise ElasticIndexNotFound(project_id)
 

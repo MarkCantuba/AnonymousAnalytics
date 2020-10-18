@@ -1,13 +1,18 @@
-from pydantic import BaseModel, Field
 from datetime import datetime, timezone
 from typing import Optional
+
+from fastapi import Path
+from pydantic import BaseModel, Field
+
+ProjectId = Path(..., max_length=50, regex=r"^[0-9a-z]+[0-9a-z\.\-_]*$")
+
 
 class NewDoc(BaseModel):
     content: str
 
 
 class Project(BaseModel):
-    id: str = Field(max_length=300, regex=r"^[0-9a-z]+[0-9a-z\.\-_]*$")
+    id: str = Field(max_length=50, regex=r"^[0-9a-z]+[0-9a-z\.\-_]*$")
     name: str
     description: Optional[str] = Field(
         None, title="The description of the project"
