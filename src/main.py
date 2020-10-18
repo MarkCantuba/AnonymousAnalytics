@@ -5,6 +5,7 @@ from fastapi import FastAPI, Query
 import config
 from migrations import *
 from models import *
+from exceptions import *
 from project.project import *
 
 conf = config.get()
@@ -101,4 +102,17 @@ async def get_events_by_timestamp(
     if not await es.indices.exists(index=project_id):
         raise ElasticIndexNotFound(project_id)
 
-    return await query_event_by_timestamp(es, project_id, start, end)
+    return await query_event_by_timestamp(es, project_name, start, end)
+
+
+@app.get("/projects/{project_name}/events/counts")
+async def get_histogram_by_date_interval(project_name: str,
+                                         start: Optional[datetime] = Query(
+                                             datetime.now(timezone.utc) - timedelta(days=7)),
+                                         end: Optional[datetime] = Query(datetime.now(timezone.utc)),
+                                         interval: Optional[int] = Query(21600)):
+
+    if not await es.indices.exists(index=project_name):
+        raise ElasticIndexNotFound(project_name)
+
+    return await query_histogram_by_date_interval(es, project_name, start, end, interval)
