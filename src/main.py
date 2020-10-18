@@ -102,17 +102,17 @@ async def get_events_by_timestamp(
     if not await es.indices.exists(index=project_id):
         raise ElasticIndexNotFound(project_id)
 
-    return await query_event_by_timestamp(es, project_name, start, end)
+    return await query_event_by_timestamp(es, project_id, start, end)
 
 
-@app.get("/projects/{project_name}/events/counts")
-async def get_histogram_by_date_interval(project_name: str,
+@app.get("/projects/{project_id}/events/counts")
+async def get_histogram_by_date_interval(project_id: str,
                                          start: Optional[datetime] = Query(
                                              datetime.now(timezone.utc) - timedelta(days=7)),
                                          end: Optional[datetime] = Query(datetime.now(timezone.utc)),
                                          interval: Optional[int] = Query(21600, gt=0)):
 
-    if not await es.indices.exists(index=project_name):
-        raise ElasticIndexNotFound(project_name)
+    if not await es.indices.exists(index=project_id):
+        raise ElasticIndexNotFound(project_id)
 
-    return await query_histogram_by_date_interval(es, project_name, start, end, interval)
+    return await query_histogram_by_date_interval(es, project_id, start, end, interval)
