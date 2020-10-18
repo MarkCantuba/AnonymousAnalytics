@@ -23,3 +23,4 @@ def query_event_by_timestamp(elastic_sess: AsyncElasticsearch, project_name: str
     }
 
     return elastic_sess.search(index=project_name, body=request_body)
+
