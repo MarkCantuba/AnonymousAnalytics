@@ -1,5 +1,6 @@
 from datetime import timedelta
 from typing import Optional
+import asyncio
 
 from elasticsearch import AsyncElasticsearch
 from fastapi import FastAPI, Query
@@ -8,12 +9,21 @@ import config
 
 import re
 
-from migration import *
+from migrations import *
 from models import *
 from exceptions import *
 from project.project import *
 
 conf = config.get()
+
+es = AsyncElasticsearch([
+    {
+        "host": conf["elasticsearch"]["private_ip"],
+        "port": conf["elasticsearch"]["rest_port"]
+    }
+])
+
+asyncio.create_task(migrate(es))
 app = FastAPI()
 
 if conf["enable_cors"]:
@@ -27,13 +37,6 @@ if conf["enable_cors"]:
         allow_headers=["*"],
         expose_headers=["*"]
     )
-
-es = AsyncElasticsearch([
-    {
-        "host": conf["elasticsearch"]["private_ip"],
-        "port": conf["elasticsearch"]["rest_port"]
-    }
-])
 
 
 @app.post("/projects", status_code=201)
