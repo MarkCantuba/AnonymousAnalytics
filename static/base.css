@@ -1,26 +1,40 @@
 :root {
-    --text-color: #223355;
-    --text-highlight-color: #3F5F9E;
-    --text-secondary-color: #314979;
+    --text-color: black;
+    --text-primary-color: #044289;
+    --text-secondary-color: #888;
+
+    --link-color: #0366d6;
+}
+
+html {
+    font-family: 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
 }
 
 h1, h2 {
     margin: 10px;
-    font-family: 'Consolas', 'Courier New', Courier, monospace;
 }
 
 a {
     text-decoration: none;
 }
 
-a:link, a:visited {
-    color: var(--text-color);
+a:link, a:visited, a:hover {
+    color: var(--link-color);
 }
 
 a:hover {
-    color: var(--text-highlight-color);
+    text-decoration: underline;
 }
 
 a:active {
+    color: var(--link-secondary-color);
+}
+
+.info-secondary {
     color: var(--text-secondary-color);
+}
+
+nav {
+    max-width: 1000px;
+    margin: 0 auto;
 }

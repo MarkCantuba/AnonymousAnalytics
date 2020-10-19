@@ -1,0 +1,20 @@
+#projects {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.project {
+    margin: 10px;
+    display: block;
+}
+
+.project a {
+    display: block;
+    font-size: 20px;
+}
+
+.project span {
+    display: block;
+    font-size: 14px;
+}

@@ -25,6 +25,10 @@ class APIService {
         return this.$axios.post('/projects', project);
     }
 
+    getProjcets() {
+        return this.$axios.get('/projects');
+    }
+
     getEvents(projectName, start, end) {
         return this.$axios.get(`/projects/${projectName}/events`, {
             start: start,
