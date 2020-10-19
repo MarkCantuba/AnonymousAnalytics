@@ -8,7 +8,7 @@ function constructProjectMarkup(projects) {
         projectMarkup
             .insert('a')
             .text(project.name)
-            .attr('href', `/projects/detail.html?project_id=${project.id}`);
+            .attr('href', `detail.html?project_id=${project.id}`);
         if (project.description) {
             projectMarkup
                 .insert('span')

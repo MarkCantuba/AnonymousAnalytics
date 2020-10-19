@@ -1,12 +1,10 @@
 #projects {
-    max-width: 1000px;
-    margin: 0 auto;
     padding: 0;
 }
 
 .project {
-    margin: 10px;
     display: block;
+    padding: 10px 0;
 }
 
 .project a {
