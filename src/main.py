@@ -1,11 +1,11 @@
 import asyncio
+from datetime import timedelta
 
 from fastapi import FastAPI, Query
 
 import config
 from migrations import *
 from models import *
-from exceptions import *
 from project.project import *
 
 conf = config.get()
@@ -44,7 +44,7 @@ async def post_project(*, project: Project):
     # add doc to .project
     # refresh the .projects index after creating the doc, so it is immediately searchable
     await es.create(
-        index='.projects',
+        index=".projects",
         id=project.id,
         refresh=True,
         body=doc
@@ -59,22 +59,22 @@ async def post_project(*, project: Project):
 # return a list of dictionaries, each dictionary contains all the fields (id, name, description) for one project.
 async def get_all_projects():
     # check if the index .projects exists, raise 404 error if not
-    if not await es.indices.exists(index='.projects'):
-        raise ElasticIndexNotFound('.projects')
+    if not await es.indices.exists(index=".projects"):
+        raise ElasticIndexNotFound(".projects")
     query = {
-        'query': {
-            'match_all': {}
+        "query": {
+            "match_all": {}
         },
-        'size': 100  # override the limit of number returned to 100
+        "size": 100  # override the limit of number returned to 100
     }
     res = await es.search(
-        index='.projects',
+        index=".projects",
         # project fields are stored in the _source of document
         body=query
     )
 
-    # extract projects from res['hits']['hits'].source
-    projects = [doc['_source'] for doc in res['hits']['hits']]
+    # extract projects from res["hits"]["hits"].source
+    projects = [doc["_source"] for doc in res["hits"]["hits"]]
     return projects
 
 
@@ -106,18 +106,22 @@ async def get_events_by_timestamp(
 
 
 @app.get("/projects/{project_id}/events/counts")
-async def get_histogram_by_date_interval(project_id: str,
-                                         start: Optional[datetime] = Query(
-                                             datetime.now(timezone.utc) - timedelta(days=7)),
-                                         end: Optional[datetime] = Query(datetime.now(timezone.utc)),
-                                         interval: Optional[int] = Query(21600, gt=0)):
-
+async def get_histogram_by_date_interval(
+        *,
+        project_id: str = ProjectId,
+        start: Optional[datetime] = Query(datetime.now(timezone.utc) - timedelta(days=7)),
+        end: Optional[datetime] = Query(datetime.now(timezone.utc)),
+        interval: Optional[int] = Query(21600, gt=0)
+):
     if not await es.indices.exists(index=project_id):
         raise ElasticIndexNotFound(project_id)
 
     response = await query_histogram_by_date_interval(es, project_id, start, end, interval)
 
-    histogram_data = [event_count['doc_count'] for event_count in response["aggregations"]["events_over_time"]["buckets"]]
+    histogram_data = [
+        event_count['doc_count']
+        for event_count
+        in response["aggregations"]["events_over_time"]["buckets"]
+    ]
 
     return histogram_data
-
