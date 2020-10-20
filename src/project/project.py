@@ -1,9 +1,16 @@
-from datetime import datetime, timedelta, timezone
+from datetime import timezone
+
 from elasticsearch import AsyncElasticsearch
+
 from exceptions import *
 
 
-def query_event_by_timestamp(elastic_sess: AsyncElasticsearch, project_name: str, start: datetime, end: datetime):
+def query_event_by_timestamp(
+        elastic_sess: AsyncElasticsearch,
+        project_name: str,
+        start: datetime,
+        end: datetime
+):
     if start > end:
         raise InvalidRange()
     if start.tzinfo != timezone.utc:
@@ -25,7 +32,13 @@ def query_event_by_timestamp(elastic_sess: AsyncElasticsearch, project_name: str
     return elastic_sess.search(index=project_name, body=request_body)
 
 
-def query_histogram_by_date_interval(elastic_sess: AsyncElasticsearch, project_name: str, start: datetime, end: datetime, interval: int):
+def query_histogram_by_date_interval(
+        elastic_sess: AsyncElasticsearch,
+        project_name: str,
+        start: datetime,
+        end: datetime,
+        interval: int
+):
     if start > end:
         raise InvalidRange()
     if start.tzinfo != timezone.utc:
@@ -38,7 +51,11 @@ def query_histogram_by_date_interval(elastic_sess: AsyncElasticsearch, project_n
             "events_over_time": {
                 "date_histogram": {
                     "field": "server_timestamp",
-                    "fixed_interval": "{}s".format(interval)
+                    "fixed_interval": "{}s".format(interval),
+                    "extended_bounds": {
+                        "min": start,
+                        "max": end
+                    }
                 }
             }
         },
@@ -50,7 +67,7 @@ def query_histogram_by_date_interval(elastic_sess: AsyncElasticsearch, project_n
                 }
             }
         },
-        "size": "0"
+        "size": 0
     }
 
     return elastic_sess.search(index=project_name, body=request_body)
