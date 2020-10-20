@@ -1,26 +1,124 @@
 :root {
-    --text-color: #223355;
-    --text-highlight-color: #3F5F9E;
-    --text-secondary-color: #314979;
+    --text-color: black;
+    --text-primary-color: #044289;
+    --text-secondary-color: #888;
+    --text-danger-color: #721c24;
+
+    --link-color: #0366d6;
+
+    --bg-danger-color: #f8d7da;
+
+    --button-priamry-color: #0366d6;
+    --button-priamry-hover-color: #0360c9;
+}
+
+html {
+    min-width: 600px;
+    font-family: 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
 }
 
 h1, h2 {
-    margin: 10px;
-    font-family: 'Consolas', 'Courier New', Courier, monospace;
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+form > .input-group {
+    margin: 10px 0;
+}
+
+form > .form-message {
+    display: none;
+    border-radius: 4px;
+    margin: 10px 0;
+    padding: 6px;
+}
+
+form > .form-message.error {
+    display: block;
+    background-color: var(--bg-danger-color);
+    color: var(--text-danger-color);
+}
+
+.input-group label {
+    display: block;
+}
+
+.input-group input[type="text"],
+.input-group textarea {
+    line-height: 1.5;
+    margin: 10px 0;
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-group input[type="text"]:active, .input-group input[type="text"]:focus,
+.input-group textarea:active, .input-group textarea:focus {
+    outline: none;
+    border: 1px solid #888;
+}
+
+.input-group textarea {
+    height: 200px;
+    resize: none;
 }
 
 a {
     text-decoration: none;
 }
 
-a:link, a:visited {
-    color: var(--text-color);
+a:link, a:visited, a:hover {
+    color: var(--link-color);
 }
 
 a:hover {
-    color: var(--text-highlight-color);
+    text-decoration: underline;
 }
 
 a:active {
+    color: var(--link-secondary-color);
+}
+
+.info-secondary {
     color: var(--text-secondary-color);
+}
+
+.btn {
+    display: block;
+    padding: 5px 10px;
+    border: 1px black solid;
+    border-radius: 4px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.btn:hover {
+    color: black;
+    text-decoration: none;
+    background-color: #eee;
+}
+
+.btn.primary {
+    border: none;
+    background-color: var(--button-priamry-color);
+    color: white;
+}
+
+.btn.primary:hover {
+    background-color: var(--button-priamry-hover-color);
 }

@@ -1,8 +1,8 @@
 'use strict';
 
-const PROJECT_NAME = getQuery('project_name');
+const PROJECT_ID = getQuery('project_id');
 
-document.title = `${PROJECT_NAME} - Project Detail`;
+document.title = `${PROJECT_ID} - Project Detail`;
 
 function generateBarChart(data) {
     data.unshift('Event Count');
@@ -16,9 +16,9 @@ function generateBarChart(data) {
 }
 
 window.addEventListener('DOMContentLoaded', e => {
-    d3.select('#project-name').html([PROJECT_NAME]);
+    d3.select('#project-name').html([PROJECT_ID]);
 
-    API_SERVICE.getEvents(PROJECT_NAME)
+    API_SERVICE.getEvents(PROJECT_ID)
     .then(response => {
         // generateBarChart(response.data);
         // DUMMY DATA: Unstable API

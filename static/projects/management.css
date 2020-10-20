@@ -1,0 +1,18 @@
+#projects {
+    padding: 0;
+}
+
+.project {
+    display: block;
+    padding: 10px 0;
+}
+
+.project a {
+    display: block;
+    font-size: 20px;
+}
+
+.project span {
+    display: block;
+    font-size: 14px;
+}
