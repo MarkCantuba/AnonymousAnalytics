@@ -10,7 +10,6 @@ stages:
 # Where is the docker image? (elasticsearch server?)
 
 build_full:
-  tags: building
   stage: build
   script: #actual commands need to be determined and formalize here
     - echo "Full build of the current dev statges."
@@ -22,14 +21,12 @@ build_full:
 #     - echo "Additional builds to catch missing details"
 
 test_unit:
-  tags: testing
   stage: test
   script: #actual commands need to be determined and formalize here 
     - echo "Once all builds in build stage complete,"
     - echo "Start unit test after succefull build."
 
 test_integration:
-  tags: testing
   stage: test
   script: #actual commands need to be determined and formalize here 
     - echo "Once unit tests complete,"
