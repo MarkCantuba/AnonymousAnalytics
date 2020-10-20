@@ -44,7 +44,7 @@ async def post_project(*, project: Project):
     # add doc to .project
     # refresh the .projects index after creating the doc, so it is immediately searchable
     await es.create(
-        index='.projects',
+        index=".projects",
         id=project.id,
         refresh=True,
         body=doc
@@ -59,22 +59,22 @@ async def post_project(*, project: Project):
 # return a list of dictionaries, each dictionary contains all the fields (id, name, description) for one project.
 async def get_all_projects():
     # check if the index .projects exists, raise 404 error if not
-    if not await es.indices.exists(index='.projects'):
-        raise ElasticIndexNotFound('.projects')
+    if not await es.indices.exists(index=".projects"):
+        raise ElasticIndexNotFound(".projects")
     query = {
-        'query': {
-            'match_all': {}
+        "query": {
+            "match_all": {}
         },
-        'size': 100  # override the limit of number returned to 100
+        "size": 100  # override the limit of number returned to 100
     }
     res = await es.search(
-        index='.projects',
+        index=".projects",
         # project fields are stored in the _source of document
         body=query
     )
 
-    # extract projects from res['hits']['hits'].source
-    projects = [doc['_source'] for doc in res['hits']['hits']]
+    # extract projects from res["hits"]["hits"].source
+    projects = [doc["_source"] for doc in res["hits"]["hits"]]
     return projects
 
 

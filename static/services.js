@@ -29,21 +29,10 @@ class APIService {
         return this.$axios.get('/projects');
     }
 
-    /*
-    getEvents(projectName, start, end) {
-        return this.$axios.get(`/projects/${projectName}/events`, {
-            start: start,
-            end: end
-        });
-    }
-    */
-
-
-    // test for histogram
-    getEvents(projectName, start, end, interval) {
-        return this.$axios.get(`/projects/${projectName}/events/counts`, {
-            start: start,
-            end: end,
+    getEventCounts(projectId, start, end, interval) {
+        return this.$axios.get(`/projects/${projectId}/events/counts`, {
+            start: start.toISO(),
+            end: end.toISO(),
             interval: interval
         });
     }

@@ -4,49 +4,45 @@ const PROJECT_ID = getQuery('project_id');
 
 document.title = `${PROJECT_ID} - Project Detail`;
 
+let end = luxon.DateTime.utc();
+let start = end.minus({days: 7});
+let interval = 21600;
+
 function generateBarChart(data) {
+    let timeseries = ['Time Interval'];
+    let time = start;
+    for (let i = 0; i < data.length; i++) {
+        timeseries.push(time.toJSDate());
+        time = time.plus({seconds: interval});
+    }
     data.unshift('Event Count');
     c3.generate({
         bindto: '#event-bar-chart',
         data: {
-            columns: [data],
+            x: 'Time Interval',
+            columns: [timeseries, data],
             type: 'bar'
+        },
+        axis: {
+            x: {
+                type: 'timeseries',
+                tick: {
+                    culling: {
+                        max: 5
+                    },
+                    format: '%Y-%m-%d %H:%M:%S'
+                }
+            }
         }
     });
 }
 
-/*
 window.addEventListener('DOMContentLoaded', e => {
     d3.select('#project-name').html([PROJECT_ID]);
 
-    API_SERVICE.getEvents(PROJECT_ID)
+    API_SERVICE.getEventCounts(PROJECT_ID, start, end, interval)
     .then(response => {
-        // generateBarChart(response.data);
-        // DUMMY DATA: Unstable API
-        generateBarChart([500, 500, 400, 500, 300]);
-    })
-    .catch(response => {
-        console.error(response);
-    });
-});
-*/
-
-
-
-
-window.addEventListener('DOMContentLoaded', e => {
-    d3.select('#project-name').html([PROJECT_NAME]);
-
-    API_SERVICE.getEvents(PROJECT_NAME, '2020-10-13T00:00:00Z', '2020-10-20T00:00:00Z', 1)
-    .then(response => {
-        // generateBarChart(response.data);
-        // DUMMY DATA: Unstable API
-
-        let response_array = response.data
-
-        console.log(response_array)
-
-        generateBarChart(response_array);
+        generateBarChart(response.data);
     })
     .catch(response => {
         console.error(response);
