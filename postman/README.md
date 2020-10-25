@@ -24,7 +24,7 @@ This folder contains all postman environments and API collections.
         - For example, instead of `http://localhost:8080/api/v1/projects/noodlecake_sample/events?start=2020-10-11T07%3A00%3A00Z`, use `http://{{server_host}}/api/v1/projects/{{project_id}}?start={{start_utc}}`
         - Make sure to [encode URL reserved characters](https://en.wikipedia.org/wiki/Percent-encoding), most notably `:` (colon) in UTC time string, [free tool](https://meyerweb.com/eric/tools/dencoder/) everywhere from Google search
     - Use "Raw" and JSON for most request bodies
-    - `ctrl-s` works, save before export!
+    - `ctrl-s`/`command-s` works, save before export!
 - Export environments and APIs to project `postman` folder
     - Export each new or changed environment in "Manage Enviornment" dialog
         - Click "Download Environment" button
@@ -49,6 +49,8 @@ It is not required to sign up a postman account and share workspace as a team, b
 
 In case a merge conflict is reported by git, dev should try to inspect the merge blocks to see what lines in the postman JSON are both modified.
 
+For the latest postman version, the exported collection and environment has a field called `_postman_exported_at` with a UTC timestamp as a value. If there is a conflict on this line, **all below steps are relevant**.
+
 - It is safe to ignore `id` field on top level that identifies an environment or a collection, as long as it is a UUID it should work.
 - Pay attention to API blocks, usually it means a patch on master has added **another API** already. Choose "accept both changes" to prevent lose work from either side. **Make sure to check braces and commas**, they might be missing or at the wrong positions to form a valid JSON.
-- If there is a "both modified" conflict on a specific field of API or environment, check with other devs to discuss which one should be used.
+- If there is a "both modified" conflict on a specific field of API or environment, check with other devs or leads to discuss which one should be used.
