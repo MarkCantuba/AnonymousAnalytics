@@ -1,4 +1,4 @@
-from datetime import timezone
+from datetime import timezone, timedelta
 
 from elasticsearch import AsyncElasticsearch
 
@@ -11,6 +11,11 @@ def query_event_by_timestamp(
         start: datetime,
         end: datetime
 ):
+    if start is None:
+        start = datetime.now(timezone.utc) - timedelta(days=7)
+    if end is None:
+        end = datetime.now(timezone.utc)
+
     if start > end:
         raise InvalidRange()
     if start.tzinfo != timezone.utc:
@@ -39,6 +44,11 @@ def query_histogram_by_date_interval(
         end: datetime,
         interval: int
 ):
+    if start is None:
+        start = datetime.now(timezone.utc) - timedelta(days=7)
+    if end is None:
+        end = datetime.now(timezone.utc)
+
     if start > end:
         raise InvalidRange()
     if start.tzinfo != timezone.utc:
