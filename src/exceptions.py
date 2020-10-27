@@ -25,10 +25,10 @@ class ElasticIndexNotFound(HTTPException):
 
 class InvalidTimestamp(HTTPException):
     def __init__(self, time: datetime):
-        self.status_code = 400
+        self.status_code = 429
 
         self.detail = {
-            "status_code": 400,
+            "status_code": 429,
             "msg": "Datetime {} has wrong timezone. Use UTC instead.".format(time)
         }
 
