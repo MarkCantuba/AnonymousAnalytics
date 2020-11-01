@@ -2,5 +2,22 @@
   remote_user: runner
   tasks:
   - debug: var=ansible_hostname
+  - include_tasks: tasks/common.yml
   - include_tasks: tasks/users.yml
   - include_tasks: tasks/python.yml
+  - include_tasks: tasks/nginx.yml
+  - name: Ensure folder /www
+    become: yes
+    file:
+      path: /www
+      state: directory
+      mode: 0777
+      owner: root
+      group: root
+  - name: Ensure folder /www/analytics
+    file:
+      path: /www/analytics
+      state: directory
+      mode: 0755
+      owner: runner
+      group: runner

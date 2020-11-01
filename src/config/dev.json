@@ -2,12 +2,13 @@
     "elasticsearch": {
         "public_ip": null,
         "private_ip": "127.0.0.1",
-        "rest-port": 9200,
-        "node-port": 9300
+        "rest_port": 9200,
+        "node_port": 9300
     },
     "backend": {
         "public_ip": null,
         "private_ip": "127.0.0.1",
         "port": 8080
-    }
+    },
+    "enable_cors": true
 }
