@@ -1,12 +1,22 @@
-from elasticsearch import AsyncElasticsearch
+from elasticsearch import Elasticsearch
 from fastapi.logger import logger
 
+import config
 
-async def migrate(es: AsyncElasticsearch):
-    if not await es.indices.exists(index=".projects"):
+conf = config.get()
+es = Elasticsearch([
+    {
+        "host": conf["elasticsearch"]["private_ip"],
+        "port": conf["elasticsearch"]["rest_port"]
+    }
+])
+
+
+def migrate():
+    if not es.indices.exists(index=".projects"):
         # Get all existing indices
-        indices = (await es.cat.indices(h="index")).split()
-        await es.indices.create(index=".projects", body={
+        indices = es.cat.indices(h="index").split()
+        es.indices.create(index=".projects", body={
             "settings": {
                 "index": {
                     "hidden": True
@@ -14,12 +24,12 @@ async def migrate(es: AsyncElasticsearch):
             }
         })
         for index in indices:
-            await es.create(index=".projects", id=index, body={
+            es.create(index=".projects", id=index, body={
                 "id": index,
                 "name": index,
                 "description": None
             })
-        await es.indices.refresh(index=".projects")
+        es.indices.refresh(index=".projects")
         logger.info("migrations.py: .projects index migrated")
     else:
         logger.info("migrations.py: .projects index already exists, skipping")

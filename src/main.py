@@ -1,9 +1,7 @@
-import asyncio
-
 from fastapi import FastAPI, Query
 
 import config
-from migrations import *
+from migrations import migrate
 from models import *
 from project.project import *
 
@@ -16,7 +14,7 @@ es = AsyncElasticsearch([
     }
 ])
 
-asyncio.create_task(migrate(es))
+migrate()
 app = FastAPI()
 
 if conf["enable_cors"]:
@@ -118,7 +116,7 @@ async def get_histogram_by_date_interval(
     response = await query_histogram_by_date_interval(es, project_id, start, end, interval)
 
     histogram_data = [
-        event_count['doc_count']
+        event_count["doc_count"]
         for event_count
         in response["aggregations"]["events_over_time"]["buckets"]
     ]
