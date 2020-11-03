@@ -1,7 +1,6 @@
 Test1:
      tags:
       - ci-regression
-     Before_script:
-      - cd /home/gitlab-runner/builds/Yz7-8dR4/0/CMPT371-01-2020/anonymous-analytics/src
      script:
+     - cd /home/gitlab-runner/builds/Yz7-8dR4/0/CMPT371-01-2020/anonymous-analytics/src
       - pytest test_models.py
