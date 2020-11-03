@@ -3,4 +3,4 @@ Test1:
       - ci-regression
      script:
       - cd /home/runner/tester/anonymous-analytics/src
-      - /home/runner/.local/bin/pytest test_models.py
+      - sudo /home/runner/.local/bin/pytest test_models.py
