@@ -3,4 +3,4 @@ Test1:
       - ci-regression
      script:
       - cd /home/gitlab-runner/builds/Yz7-8dR4/0/CMPT371-01-2020/anonymous-analytics/src
-      - python3 -m pytest test_models.py
+      - /home/runner/.local/bin/pytest test_models.py
