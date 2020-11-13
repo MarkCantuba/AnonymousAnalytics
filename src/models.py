@@ -23,4 +23,4 @@ class Event(BaseModel):
     server_timestamp: datetime = datetime.now(timezone.utc)
     client_timestamp: datetime
     event_type: str
-    event: dict
+    event_body: dict

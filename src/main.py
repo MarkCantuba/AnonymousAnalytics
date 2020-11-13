@@ -79,12 +79,14 @@ async def get_all_projects():
 async def post_event_to_project(
         *,
         project_id: str = ProjectId,
-        event: dict
+        client_timestamp: datetime,
+        event_type: str,
+        event_body: dict
 ):
     if not await es.indices.exists(index=project_id):
         raise ElasticIndexNotFound(project_id)
 
-    new_event = Event(event=event)
+    new_event = Event(client_timestamp=client_timestamp, event_type=event_type, event_body=event_body)
 
     return await es.index(project_id, new_event.json())
 
