@@ -34,9 +34,16 @@ def migrate():
     else:
         logger.info("migrations.py: .projects index already exists, skipping")
 
+    all_projects = es.search(index=".projects")
+    hits = all_projects["hits"]["hits"]
+    project_ids = [hit["_source"]["id"] for hit in hits]
+
+    for project in project_ids:
+        bulk_update_documents(index=project)
+
 
 def bulk_update_documents(*, index: str):
-    update_doc_script = "if (!ctx._source.containsKey('event_type') || ctx._source.event_type == '') {" \
+    update_doc_script = "if (!ctx._source.containsKey('event_type') || ctx._source.event_type == 'hello') {" \
                         "  ctx._source.event_type = 'default_event' } " \
                         "if (!ctx._source.containsKey('client_timestamp')) {" \
                         "  ctx._source.client_timestamp = ctx._source.server_timestamp }"
@@ -50,8 +57,4 @@ def bulk_update_documents(*, index: str):
 
 
 if __name__ == "__main__":
-    indices = es.cat.indices(h="index").split()
-    indices.remove(".projects")
-
-    for index in indices:
-        bulk_update_documents(index=index)
+    migrate()
