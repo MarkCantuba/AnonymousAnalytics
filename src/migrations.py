@@ -33,3 +33,25 @@ def migrate():
         logger.info("migrations.py: .projects index migrated")
     else:
         logger.info("migrations.py: .projects index already exists, skipping")
+
+
+def bulk_update_documents(*, index: str):
+    update_doc_script = "if (!ctx._source.containsKey('event_type') || ctx._source.event_type == '') {" \
+                        "  ctx._source.event_type = 'default_event' } " \
+                        "if (!ctx._source.containsKey('client_timestamp')) {" \
+                        "  ctx._source.client_timestamp = ctx._source.server_timestamp }"
+
+    request_body = {"script": update_doc_script}
+
+    try:
+        es.update_by_query(index=index, body=request_body)
+    except Exception as e:
+        return e
+
+
+if __name__ == "__main__":
+    indices = es.cat.indices(h="index").split()
+    indices.remove(".projects")
+
+    for index in indices:
+        bulk_update_documents(index=index)
