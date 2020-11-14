@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from elasticsearch import Elasticsearch
 from fastapi.logger import logger
 
@@ -10,6 +11,44 @@ es = Elasticsearch([
         "port": conf["elasticsearch"]["rest_port"]
     }
 ])
+
+
+def schema_versions(*, name: str, version: str):
+    if not es.indices.exists(index=".schema"):
+        settings = {
+            "settings": {
+                "index": {
+                    "hidden": True
+                }
+            }
+        }
+        es.indices.create(index=".schema", body=settings)
+        logger.info("migrations.py: .schema index created")
+    else:
+        logger.info("migrations.py: .schema already exists")
+
+    es.index(index=".schema", body={
+        "name": name,
+        "version": version,
+        "version_datetime": datetime.now(timezone.utc)
+        })
+
+
+def bulk_update_documents(*, index: str):
+    update_doc_script = "if (!ctx._source.containsKey('event_type') || ctx._source.event_type == 'hello') {" \
+                        "  ctx._source.event_type = 'default_event'; } " \
+                        "if (!ctx._source.containsKey('client_timestamp')) {" \
+                        "  ctx._source.client_timestamp = ctx._source.server_timestamp; }" \
+                        "if (ctx._source.containsKey('event')) {" \
+                        "  ctx._source.event_body = ctx._source.event ;" \
+                        "  ctx._source.remove('event'); }"
+
+    request_body = {"script": update_doc_script}
+
+    try:
+        es.update_by_query(index=index, body=request_body)
+    except Exception as e:
+        return e
 
 
 def migrate():
@@ -30,6 +69,8 @@ def migrate():
                 "description": None
             })
         es.indices.refresh(index=".projects")
+
+        schema_versions(name=".projects", version="1")
         logger.info("migrations.py: .projects index migrated")
     else:
         logger.info("migrations.py: .projects index already exists, skipping")
@@ -41,22 +82,7 @@ def migrate():
     for project in project_ids:
         bulk_update_documents(index=project)
 
-
-def bulk_update_documents(*, index: str):
-    update_doc_script = "if (!ctx._source.containsKey('event_type') || ctx._source.event_type == 'hello') {" \
-                        "  ctx._source.event_type = 'default_event'; } " \
-                        "if (!ctx._source.containsKey('client_timestamp')) {" \
-                        "  ctx._source.client_timestamp = ctx._source.server_timestamp; }" \
-                        "if (ctx._source.containsKey('event')) {" \
-                        "  ctx._source.event_body = ctx._source.event ;" \
-                        "  ctx._source.remove('event'); }"
-
-    request_body = {"script": update_doc_script}
-
-    try:
-        es.update_by_query(index=index, body=request_body)
-    except Exception as e:
-        return e
+    schema_versions(name="attribute_structure", version="1")
 
 
 if __name__ == "__main__":

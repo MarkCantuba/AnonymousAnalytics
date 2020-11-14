@@ -26,5 +26,5 @@ class Event(BaseModel):
     event_body: dict
 
     @validator('server_timestamp', pre=True, always=True)
-    def set_ts_now(cls, v):
+    def set_datetime_now(cls, v):
         return v or datetime.now(timezone.utc)
