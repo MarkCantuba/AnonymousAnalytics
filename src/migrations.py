@@ -35,13 +35,13 @@ def schema_versions(*, name: str, version: str):
 
 
 def bulk_update_documents(*, index: str):
-    update_doc_script = "if (!ctx._source.containsKey('event_type') || ctx._source.event_type == 'hello') {" \
-                        "  ctx._source.event_type = 'default_event'; } " \
-                        "if (!ctx._source.containsKey('client_timestamp')) {" \
-                        "  ctx._source.client_timestamp = ctx._source.server_timestamp; }" \
-                        "if (ctx._source.containsKey('event')) {" \
-                        "  ctx._source.event_body = ctx._source.event ;" \
-                        "  ctx._source.remove('event'); }"
+    update_doc_script = '''if (!ctx._source.containsKey('event_type') || ctx._source.event_type == '') {
+                             ctx._source.event_type = 'default_event'; } 
+                           if (!ctx._source.containsKey('client_timestamp')) {
+                             ctx._source.client_timestamp = ctx._source.server_timestamp; }
+                           if (ctx._source.containsKey('event')) {
+                             ctx._source.event_body = ctx._source.event ;
+                             ctx._source.remove('event'); } '''
 
     request_body = {"script": update_doc_script}
 
