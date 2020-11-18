@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+
 from elasticsearch import Elasticsearch
 from fastapi.logger import logger
 
@@ -13,77 +14,106 @@ es = Elasticsearch([
 ])
 
 
-def schema_versions(*, name: str, version: str):
-    if not es.indices.exists(index=".schema"):
-        settings = {
-            "settings": {
-                "index": {
-                    "hidden": True
-                }
-            }
+def add_projects_index():
+    # Get all existing visible indices
+    indices = es.cat.indices(h="index").split()
+    es.indices.create(index=".projects", body={
+        "settings": {
+            "hidden": True
         }
-        es.indices.create(index=".schema", body=settings)
-        logger.info("migrations.py: .schema index created")
-    else:
-        logger.info("migrations.py: .schema already exists")
+    })
 
-    es.index(index=".schema", body={
-        "name": name,
-        "version": version,
-        "version_datetime": datetime.now(timezone.utc)
+    for index in indices:
+        es.create(index=".projects", id=index, body={
+            "id": index,
+            "name": index,
+            "description": None
         })
 
+    es.indices.refresh(index=".projects")
 
-def bulk_update_documents(*, index: str):
-    update_doc_script = '''if (!ctx._source.containsKey('event_type') || ctx._source.event_type == '') {
-                             ctx._source.event_type = 'default_event'; } 
-                           if (!ctx._source.containsKey('client_timestamp')) {
-                             ctx._source.client_timestamp = ctx._source.server_timestamp; }
-                           if (ctx._source.containsKey('event')) {
-                             ctx._source.event_body = ctx._source.event ;
-                             ctx._source.remove('event'); } '''
 
-    request_body = {"script": update_doc_script}
+def add_event_type():
+    update_doc_script = '''
+        if (!ctx._source.containsKey('event_type') || ctx._source.event_type == '') {
+            ctx._source.event_type = 'default_event';
+        }
+        if (!ctx._source.containsKey('client_timestamp')) {
+            ctx._source.client_timestamp = ctx._source.server_timestamp;
+        }
+        if (ctx._source.containsKey('event')) {
+            ctx._source.event_body = ctx._source.event ;
+            ctx._source.remove('event');
+        }
+    '''
 
-    try:
-        es.update_by_query(index=index, body=request_body)
-    except Exception as e:
-        return e
+    result = es.search(index=".projects", body={
+        "query": {
+            "match_all": {}
+        },
+        "size": 100
+    })
+    projects = result["hits"]["hits"]
+    project_ids = [project["_source"]["id"] for project in projects]
+
+    for project_id in project_ids:
+        try:
+            es.update_by_query(index=project_id, body={
+                "script": update_doc_script
+            })
+        except Exception as e:
+            # TODO: investigage logging -- it is not shwoing in uvicorn logger
+            logger.error("migrations.py:", e)
+
+
+VERSIONS = [
+    {
+        "name": "add .projects",
+        "version": 1,
+        "fn": add_projects_index
+    },
+    {
+        "name": "add event_type",
+        "version": 2,
+        "fn": add_event_type
+    }
+]
 
 
 def migrate():
-    if not es.indices.exists(index=".projects"):
-        # Get all existing indices
-        indices = es.cat.indices(h="index").split()
-        es.indices.create(index=".projects", body={
+    if not es.indices.exists(index=".schema"):
+        es.indices.create(index=".schema", body={
             "settings": {
-                "index": {
-                    "hidden": True
-                }
+                "hidden": True
             }
         })
-        for index in indices:
-            es.create(index=".projects", id=index, body={
-                "id": index,
-                "name": index,
-                "description": None
-            })
-        es.indices.refresh(index=".projects")
-
-        schema_versions(name=".projects", version="1")
-        logger.info("migrations.py: .projects index migrated")
+        logger.info("migrations.py: .schema index created")
+        latest_version = 0
     else:
-        logger.info("migrations.py: .projects index already exists, skipping")
+        result = es.search(index=".schema", size=1, body={
+            "query": {
+                "match_all": {}
+            },
+            "sort": [{
+                "version": {
+                    "order": "desc"
+                }
+            }]
+        })
+        latest_migration = result["hits"]["hits"][0]
+        if latest_migration is None:
+            latest_version = 0
+        else:
+            latest_version = latest_migration["_source"]["version"]
 
-    all_projects = es.search(index=".projects")
-    hits = all_projects["hits"]["hits"]
-    project_ids = [hit["_source"]["id"] for hit in hits]
+    unapplied_migrations = VERSIONS[latest_version:]
 
-    for project in project_ids:
-        bulk_update_documents(index=project)
+    for migration in unapplied_migrations:
+        migration["fn"]()
+        es.index(index=".schema", body={
+            "name": migration["name"],
+            "version": migration["version"],
+            "created_timestamp": datetime.now(timezone.utc)
+        })
 
-    schema_versions(name="attribute_structure", version="1")
-
-
-if __name__ == "__main__":
-    migrate()
+    es.indices.refresh(index=".schema")
