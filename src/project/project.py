@@ -4,17 +4,17 @@ from elasticsearch import AsyncElasticsearch
 
 from exceptions import *
 
+from datetime import datetime, timezone
 
-def query_event_by_timestamp(
-        elastic_sess: AsyncElasticsearch,
-        project_name: str,
-        start: datetime,
-        end: datetime
-):
+from elasticsearch import Elasticsearch
+import config
+
+
+def validate_time_format(start: datetime, end: datetime):
     if start is None:
-        start = datetime.now(timezone.utc) - timedelta(days=7)
+        new_start = datetime.now(timezone.utc) - timedelta(days=7)
     if end is None:
-        end = datetime.now(timezone.utc)
+        new_end = datetime.now(timezone.utc)
 
     if start > end:
         raise InvalidRange()
@@ -22,6 +22,17 @@ def query_event_by_timestamp(
         raise InvalidTimestamp(start)
     if end.tzinfo != timezone.utc:
         raise InvalidTimestamp(end)
+
+    return new_start, new_end
+
+
+def query_event_by_timestamp(
+        elastic_sess: AsyncElasticsearch,
+        project_name: str,
+        start: datetime,
+        end: datetime
+):
+    start, end = validate_time_format(start, end)
 
     request_body = {
         "query": {
@@ -44,17 +55,7 @@ def query_histogram_by_date_interval(
         end: datetime,
         interval: int
 ):
-    if start is None:
-        start = datetime.now(timezone.utc) - timedelta(days=7)
-    if end is None:
-        end = datetime.now(timezone.utc)
-
-    if start > end:
-        raise InvalidRange()
-    if start.tzinfo != timezone.utc:
-        raise InvalidTimestamp(start)
-    if end.tzinfo != timezone.utc:
-        raise InvalidTimestamp(end)
+    start, end = validate_time_format(start, end)
 
     request_body = {
         "aggs": {
