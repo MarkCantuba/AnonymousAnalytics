@@ -49,10 +49,11 @@ window.addEventListener('DOMContentLoaded', e => {
     });
 
     d3.select('#period-change').on('change', e=> {
-        console.log("1");
-        var period = document.getElementById("period-change");
-        var periodValue = encodeURIComponent(period.value);
-        start = end.minus({days: periodValue});
+        const pair = d3.select('#period-change').node(); // pair contains period and interval
+        const period = pair.value.split(';')[0]; 
+        interval = pair.value.split(';')[1];
+        end = luxon.DateTime.utc();
+        start = end.minus({days: period});
         API_SERVICE.getEventCounts(PROJECT_ID, start, end, interval)
         .then(response => {
             generateBarChart(response.data);
