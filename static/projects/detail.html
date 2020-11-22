@@ -16,7 +16,23 @@
             <h1 id="project-name">Loading Project...</h1>
         </nav>
         <main>
+            <div class="select-period">
+                <div class="select-period-label">
+                <label class = "select-period-label-text" for="period-change">Show statistics for recent:</label>
+                </div>
+                <div class = "select-period-option">
+                    <select id="period-change">
+                    <option value="1">1 day</option>
+                    <option value="3">3 days</option>
+                    <option value="7" selected>7 days</option>
+                    <option value="15">15 days</option>
+                    <option value="30">30 days</option>
+                    </select>
+                </div>
+            </div>
+            <div class = "event-bar-chart">
             <div id="event-bar-chart"></div>
+            </div>
         </main>
     </body>
 </html>

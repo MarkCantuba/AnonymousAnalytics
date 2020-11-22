@@ -122,3 +122,35 @@ a:active {
 .btn.primary:hover {
     background-color: var(--button-priamry-hover-color);
 }
+
+select {
+ 
+    padding: 5px 35px 5px 5px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+}
+.select-period-label {
+    position: absolute;
+    left: 60%;
+    top: 10%;
+}
+.select-period-label-text {
+    font-weight: bold;
+    font-size: 18px;
+    padding: 50px;
+}
+.select-period-option{
+    position: absolute;
+    top: 30%;
+    left: 90%;
+}
+.select-period{
+    position: relative;
+}
+.event-bar-chart{
+    position: absolute;
+    left: 50px;
+    top: 200px;
+    width: 80%;
+    padding: 20px;
+}

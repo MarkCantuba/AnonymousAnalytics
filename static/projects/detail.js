@@ -47,4 +47,18 @@ window.addEventListener('DOMContentLoaded', e => {
     .catch(response => {
         console.error(response);
     });
+
+    d3.select('#period-change').on('change', e=> {
+        console.log("1");
+        var period = document.getElementById("period-change");
+        var periodValue = encodeURIComponent(period.value);
+        start = end.minus({days: periodValue});
+        API_SERVICE.getEventCounts(PROJECT_ID, start, end, interval)
+        .then(response => {
+            generateBarChart(response.data);
+        })
+        .catch(response => {
+            console.error(response);
+        });
+    });
 });
