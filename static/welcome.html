@@ -7,6 +7,22 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="/normalize.css">
         <link rel="stylesheet" href="/base.css">
+
+        <style>
+            .page_navigation{
+                padding: -20px;
+            }
+            .breadcrumb_item{
+                display: inline-block;
+            }
+
+            .breadcrumb_item:not(:last-of-type)::after{
+                content:'>';
+                margin: 0 5px;
+                
+            }
+
+        </style>
     </head>
     <body>
         <nav>
@@ -17,5 +33,22 @@
                 <h2>Project Management</h2>
             </a>
         </main>
+        <ul class="page_navigation">
+            <li class="breadcrumb_item">
+                <a href = "" class="breadcrumb_link">
+                    Home
+                </a>
+            </li>
+            <li class="breadcrumb_item">
+                <a href = "" class="breadcrumb_link">
+                    Project
+                </a>
+            </li>
+            <li class="breadcrumb_item">
+                <a href = "" class="breadcrumb_link breadcrumb_link--active">
+                    New
+                </a>
+            </li>
+        </ul>
     </body>
 </html>
