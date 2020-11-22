@@ -7,14 +7,15 @@ from exceptions import *
 from datetime import datetime, timezone
 
 from elasticsearch import Elasticsearch
+
 import config
 
 
 def validate_time_format(start: datetime, end: datetime):
     if start is None:
-        new_start = datetime.now(timezone.utc) - timedelta(days=7)
+        start = datetime.now(timezone.utc) - timedelta(days=7)
     if end is None:
-        new_end = datetime.now(timezone.utc)
+        end = datetime.now(timezone.utc)
 
     if start > end:
         raise InvalidRange()
@@ -23,7 +24,7 @@ def validate_time_format(start: datetime, end: datetime):
     if end.tzinfo != timezone.utc:
         raise InvalidTimestamp(end)
 
-    return new_start, new_end
+    return start, end
 
 
 def query_event_by_timestamp(
@@ -51,6 +52,7 @@ def query_event_by_timestamp(
 def query_histogram_by_date_interval(
         elastic_sess: AsyncElasticsearch,
         project_name: str,
+        event_type: str,
         start: datetime,
         end: datetime,
         interval: int
@@ -71,14 +73,22 @@ def query_histogram_by_date_interval(
             }
         },
         "query": {
-            "range": {
-                "server_timestamp": {
-                    "gte": start,
-                    "lte": end
-                }
+            "bool": {
+                "filter": [
+                    {"range": {"server_timestamp": {"gte": start, "lte": end}}}
+                ]
             }
         },
         "size": 0
     }
+
+    if event_type is not None or event_type.strip() != "":
+        event_term = {
+            "term": {
+                "event_type": event_type.lower()
+            }
+        }
+
+        request_body["query"]["bool"]["filter"].append(event_term)
 
     return elastic_sess.search(index=project_name, body=request_body)
