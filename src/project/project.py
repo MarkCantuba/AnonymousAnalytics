@@ -6,10 +6,6 @@ from exceptions import *
 
 from datetime import datetime, timezone
 
-from elasticsearch import Elasticsearch
-
-import config
-
 
 def validate_time_format(start: datetime, end: datetime):
     if start is None:
@@ -84,8 +80,10 @@ def query_histogram_by_date_interval(
 
     if event_type is not None and event_type.strip() != "":
         event_term = {
-            "term": {
-                "event_type": event_type.lower()
+            "regexp": {
+                "event_type": {
+                    ".*{}.*".format(event_type)
+                }
             }
         }
 
