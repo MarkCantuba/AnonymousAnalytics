@@ -82,7 +82,7 @@ def query_histogram_by_date_interval(
         "size": 0
     }
 
-    if event_type is not None or event_type.strip() != "":
+    if event_type is not None and event_type.strip() != "":
         event_term = {
             "term": {
                 "event_type": event_type.lower()
