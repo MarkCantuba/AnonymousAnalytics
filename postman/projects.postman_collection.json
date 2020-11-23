@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b661af18-4354-4d02-b229-c3e5cd744ba7",
+		"_postman_id": "c3942739-1320-4b1a-98f5-e107a0b5090b",
 		"name": "projects",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -122,7 +122,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"sessionTimestamp\": 1601833433061,\r\n    \"appVersion\": \"1.7.6\",\r\n    \"sessionDuration\": 0,\r\n    \"countryISO\": \"IN\",\r\n    \"eventName\": \"Flurry.EmptySession\",\r\n    \"eventOffset\": 0,\r\n    \"eventParameters\": {},\r\n    \"sessionProperties\": {},\r\n    \"firstSessionTimestamp\": 1601833433061,\r\n    \"userProperties\": []\r\n}",
+					"raw": "{ \r\n    \"client_timestamp\": \"{{client_timestamp}}\",\r\n    \"event_type\": \"{{event_type}}\",\r\n    \"event_body\": {\r\n        \"sessionTimestamp\": 1601833433061,\r\n        \"appVersion\": \"1.7.6\",\r\n        \"sessionDuration\": 0,\r\n        \"countryISO\": \"IN\",\r\n        \"eventOffset\": 0,\r\n        \"eventParameters\": {},\r\n        \"sessionProperties\": {},\r\n        \"firstSessionTimestamp\": 1601833433061,\r\n        \"userProperties\": []\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -130,14 +130,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{server_host}}/projects/{{project_id}}/events",
+					"raw": "http://localhost:8080/projects/blarg/events",
 					"protocol": "http",
 					"host": [
-						"{{server_host}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"projects",
-						"{{project_id}}",
+						"blarg",
 						"events"
 					]
 				},
@@ -150,7 +151,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "6be0c00c-7cce-4387-9081-9e5e6191a855",
+				"id": "f8702bfd-4b21-48b5-a762-91525001cec6",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -160,7 +161,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "69e7064e-f4c7-40de-a334-741ee630cd8a",
+				"id": "3d2106a4-2982-487d-ba73-a90ec38a470d",
 				"type": "text/javascript",
 				"exec": [
 					""
