@@ -81,7 +81,7 @@ def query_histogram_by_date_interval(
     if event_type is not None and event_type.strip() != "":
         event_term = {
             "regexp": {
-                "event_type":  ".*{}.*".format(event_type)
+                "event_type":  ".*{}.*".format(event_type.lower())
             }
         }
 
