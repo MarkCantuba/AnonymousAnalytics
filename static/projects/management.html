@@ -12,15 +12,43 @@
         <link rel="stylesheet" href="/normalize.css">
         <link rel="stylesheet" href="/base.css">
         <link rel="stylesheet" href="management.css">
+        <style>
+            .page_navigation{
+                padding: -20px;
+            }
+            .breadcrumb_item{
+                display: inline-block;
+            }
+
+            .breadcrumb_item:not(:last-of-type)::after{
+                content:'>';
+                margin: 0 5px;
+
+            }
+
+        </style>
     </head>
     <body>
         <nav>
             <h1>Project Management</h1>
             <a class="btn primary" href="new-project.html"><i class="fas fa-plus"></i> New Project</a>
         </nav>
+
         <main>
             <ul id="projects">
             </ul>
         </main>
+        <ul class="page_navigation">
+            <li class="breadcrumb_item">
+                <a href = "/welcome.html" class="breadcrumb_link">
+                    Home
+                </a>
+            </li>
+            <li class="breadcrumb_item">
+                <a href = "/projects/management.html" class="breadcrumb_link">
+                    Project
+                </a>
+            </li>
+        </ul>
     </body>
 </html>
