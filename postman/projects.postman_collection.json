@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c3942739-1320-4b1a-98f5-e107a0b5090b",
+		"_postman_id": "213ea939-4bd2-4b27-98d3-ec3794cb7f36",
 		"name": "projects",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -122,7 +122,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \r\n    \"client_timestamp\": \"{{client_timestamp}}\",\r\n    \"event_type\": \"{{event_type}}\",\r\n    \"event_body\": {\r\n        \"sessionTimestamp\": 1601833433061,\r\n        \"appVersion\": \"1.7.6\",\r\n        \"sessionDuration\": 0,\r\n        \"countryISO\": \"IN\",\r\n        \"eventOffset\": 0,\r\n        \"eventParameters\": {},\r\n        \"sessionProperties\": {},\r\n        \"firstSessionTimestamp\": 1601833433061,\r\n        \"userProperties\": []\r\n    }\r\n}",
+					"raw": "{ \r\n    \"client_timestamp\": \"2020-11-22T00:00:00\",\r\n    \"event_type\": \"Flurry.EmptySession\",\r\n    \"event_body\": {\r\n        \"sessionTimestamp\": 1601833433061,\r\n        \"appVersion\": \"1.7.6\",\r\n        \"sessionDuration\": 0,\r\n        \"countryISO\": \"IN\",\r\n        \"eventOffset\": 0,\r\n        \"eventParameters\": {},\r\n        \"sessionProperties\": {},\r\n        \"firstSessionTimestamp\": 1601833433061,\r\n        \"userProperties\": []\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -130,15 +130,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/projects/blarg/events",
-					"protocol": "http",
+					"raw": "http:/{{server_host}}/projects/{{project_id}}/events",
 					"host": [
-						"localhost"
+						"http"
 					],
-					"port": "8080",
+					"port": "",
 					"path": [
+						"{{server_host}}",
 						"projects",
-						"blarg",
+						"{{project_id}}",
 						"events"
 					]
 				},
@@ -151,7 +151,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "f8702bfd-4b21-48b5-a762-91525001cec6",
+				"id": "75c03914-8937-4ab5-881e-610d19d9c3e7",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -161,7 +161,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "3d2106a4-2982-487d-ba73-a90ec38a470d",
+				"id": "9c73b594-60db-47ad-99de-a70dfcc4967d",
 				"type": "text/javascript",
 				"exec": [
 					""
