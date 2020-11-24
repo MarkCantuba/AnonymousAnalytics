@@ -40,4 +40,4 @@ class APIService {
     }
 }
 
-const API_SERVICE = new APIService('INTEGRATION');
+const API_SERVICE = new APIService();

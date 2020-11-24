@@ -53,29 +53,45 @@ form > .form-message.error {
     color: var(--text-danger-color);
 }
 
-.input-group label {
+label {
     display: block;
 }
 
-.input-group input[type="text"],
-.input-group textarea {
+input[type="text"], textarea, select {
+    font-family: inherit;
+    font-size: inherit;
     line-height: 1.5;
-    margin: 10px 0;
-    width: 100%;
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.input-group input[type="text"]:active, .input-group input[type="text"]:focus,
-.input-group textarea:active, .input-group textarea:focus {
+input[type="text"]:active, input[type="text"]:focus,
+textarea:active, textarea:focus,
+select:focus {
     outline: none;
     border: 1px solid #888;
+}
+
+.input-group input[type="text"],
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    margin: 10px 0;
 }
 
 .input-group textarea {
     height: 200px;
     resize: none;
+}
+
+.input-inline {
+    display: flex;
+    align-items: center;
+}
+
+.input-inline label {
+    margin: 0 10px 0 0;
 }
 
 a {
