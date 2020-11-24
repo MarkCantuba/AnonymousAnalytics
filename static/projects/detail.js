@@ -1,5 +1,13 @@
 'use strict';
 
+const DEFAULT_RECENT_DAYS = [
+    { recent: 1, interval: 3600 },
+    { recent: 3, interval: 10800 },
+    { recent: 7, interval: 21600 },
+    { recent: 15, interval: 43200 },
+    { recent: 30, interval: 86400 }
+];
+
 const PROJECT_ID = getQuery('project_id');
 
 document.title = `${PROJECT_ID} - Project Detail`;
@@ -46,5 +54,19 @@ window.addEventListener('DOMContentLoaded', e => {
     })
     .catch(response => {
         console.error(response);
+    });
+
+    d3.select('#period-change').on('change', () => {
+        let recentDays = parseInt(d3.select('#period-change').property('value'));
+        interval = DEFAULT_RECENT_DAYS.find(s => s.recent === recentDays).interval;
+        end = luxon.DateTime.utc();
+        start = end.minus({days: recentDays});
+        API_SERVICE.getEventCounts(PROJECT_ID, start, end, interval)
+        .then(response => {
+            generateBarChart(response.data);
+        })
+        .catch(response => {
+            console.error(response);
+        });
     });
 });

@@ -10,12 +10,23 @@
         <script src="detail.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css" integrity="sha512-cznfNokevSG7QPA5dZepud8taylLdvgr0lDqw/FEZIhluFsSwyvS81CMnRdrNSKwbsmc43LtRd2/WMQV+Z85AQ==" crossorigin="anonymous">
         <link rel="stylesheet" href="/base.css">
+        <link rel="stylesheet" href="/projects/detail.css">
     </head>
     <body>
         <nav>
             <h1 id="project-name">Loading Project...</h1>
         </nav>
         <main>
+            <div class="input-inline">
+                <label for="period-change">Show statistics for recent:</label>
+                <select id="period-change">
+                    <option value="1">1 day</option>
+                    <option value="3">3 days</option>
+                    <option value="7" selected>7 days</option>
+                    <option value="15">15 days</option>
+                    <option value="30">30 days</option>
+                </select>
+            </div>
             <div id="event-bar-chart"></div>
         </main>
     </body>
