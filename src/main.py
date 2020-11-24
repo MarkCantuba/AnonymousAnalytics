@@ -84,7 +84,9 @@ async def post_event_to_project(
     if not await es.indices.exists(index=project_id):
         raise ElasticIndexNotFound(project_id)
 
-    new_event = Event(event=event)
+    new_event = Event(client_timestamp=event["client_timestamp"],
+                      event_type=event["event_type"],
+                      event_body=event["event_body"])
 
     return await es.index(project_id, new_event.json())
 
