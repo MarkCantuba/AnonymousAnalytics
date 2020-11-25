@@ -125,3 +125,22 @@ async def get_histogram_by_date_interval(
     ]
 
     return histogram_data
+
+@app.get("/projects/{project_id}/events/mappings")
+async def get_events_by_timestamp(
+        *,
+        project_id: str = ProjectId
+):
+    
+    if not await es.indices.exists(index=project_id):
+        raise ElasticIndexNotFound(project_id)
+    res = await query_event_mappings(es, project_id)
+    list_of_dics = [hit["_source"] for hit in res["hits"]["hits"]]
+    return_value = []
+    for d in list_of_dics:
+        temp_dict={}
+        temp_dict["event_type"] = d["event_type"]
+        temp_dict["event_body"] = d["event_body"]
+        return_value.append(temp_dict)
+    return return_value
+   

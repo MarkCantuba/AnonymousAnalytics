@@ -81,3 +81,19 @@ def query_histogram_by_date_interval(
     }
 
     return elastic_sess.search(index=project_name, body=request_body)
+
+def query_event_mappings(
+        elastic_sess: AsyncElasticsearch,
+        project_name: str
+):
+    request_body = {
+        "query" : {
+            "bool": {
+                "must" : [{ 
+                    "terms" : { "event_type" : ["bool","number","text","list","object"] }, 
+                    }]
+            }
+        }
+    }
+
+    return elastic_sess.search(index=project_name, body=request_body)
