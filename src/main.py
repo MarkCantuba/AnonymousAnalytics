@@ -101,7 +101,8 @@ async def get_events_by_timestamp(
     if not await es.indices.exists(index=project_id):
         raise ElasticIndexNotFound(project_id)
 
-    return await query_event_by_timestamp(es, project_id, start, end)
+    res = await query_event_by_timestamp(es, project_id, start, end)
+    return [hit["_source"] for hit in res["hits"]["hits"]]
 
 
 @app.get("/projects/{project_id}/events/counts")
