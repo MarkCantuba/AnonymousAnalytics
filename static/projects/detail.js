@@ -10,8 +10,6 @@ const DEFAULT_RECENT_DAYS = [
 
 const PROJECT_ID = getQuery('project_id');
 
-document.title = `${PROJECT_ID} - Project Detail`;
-
 let end = luxon.DateTime.utc();
 let start = end.minus({days: 7});
 let interval = 21600;
@@ -46,10 +44,14 @@ function generateBarChart(data) {
 }
 
 window.addEventListener('DOMContentLoaded', e => {
-    d3.select('#project-name').html([PROJECT_ID]);
+    d3.select('#project-name').text([PROJECT_ID]);
 
     API_SERVICE.getEventCounts(PROJECT_ID, start, end, interval)
     .then(response => {
+        document.title = `${PROJECT_ID} - Project Detail`;
+        d3.select('.breadcrumb > li:last-child a')
+            .text(PROJECT_ID)
+            .attr('href', `/projects/detail.html?project_id=${PROJECT_ID}`);
         generateBarChart(response.data);
     })
     .catch(response => {
