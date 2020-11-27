@@ -1,3 +1,8 @@
-.input-inline {
+.chart-filters {
+    display: flex;
     justify-content: flex-end;
+}
+
+.chart-filters .input-inline {
+    margin: 0 10px 0 0;
 }

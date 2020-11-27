@@ -29,15 +29,22 @@
                     <a>Loading...</a>
                 </li>
             </ul>
-            <div class="input-inline">
-                <label for="period-change">Show statistics for recent:</label>
-                <select id="period-change">
-                    <option value="1">1 day</option>
-                    <option value="3">3 days</option>
-                    <option value="7" selected>7 days</option>
-                    <option value="15">15 days</option>
-                    <option value="30">30 days</option>
-                </select>
+            <div class="chart-filters">
+                <div class="input-inline">
+                    <label for="event-type-filter">Event Type:</label>
+                    <input id="event-type-filter" type="text" placeholder="ALL events">
+                </div>
+                <div class="input-inline">
+                    <label for="period-change">Show statistics for recent:</label>
+                    <select id="period-change">
+                        <option value="1">1 day</option>
+                        <option value="3">3 days</option>
+                        <option value="7" selected>7 days</option>
+                        <option value="15">15 days</option>
+                        <option value="30">30 days</option>
+                    </select>
+                </div>
+                <button id="apply-filter" class="btn primary">Apply Filter</button>
             </div>
             <div id="event-bar-chart"></div>
         </main>
