@@ -55,9 +55,6 @@ async def post_project(*, project: Project):
 # get all projects currently recorded
 # return a list of dictionaries, each dictionary contains all the fields (id, name, description) for one project.
 async def get_all_projects():
-    # check if the index .projects exists, raise 404 error if not
-    if not await es.indices.exists(index=".projects"):
-        raise ElasticIndexNotFound(".projects")
     query = {
         "query": {
             "match_all": {}
@@ -73,6 +70,18 @@ async def get_all_projects():
     # extract projects from res["hits"]["hits"].source
     projects = [doc["_source"] for doc in res["hits"]["hits"]]
     return projects
+
+
+@app.get("/projects/{project_id}")
+async def get_project(
+    *,
+    project_id: str = ProjectId,
+):
+    if not await es.indices.exists(index=project_id):
+        raise ElasticIndexNotFound(project_id)
+    response = await es.get(index=".projects", id=project_id)
+
+    return response["_source"]
 
 
 @app.post("/projects/{project_id}/events")

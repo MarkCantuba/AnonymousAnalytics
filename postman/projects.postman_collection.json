@@ -24,6 +24,25 @@
 			"response": []
 		},
 		{
+			"name": "GetProject",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{server_host}}/projects/{{project_id}}",
+					"protocol": "http",
+					"host": [
+						"{{server_host}}"
+					],
+					"path": [
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GetEvents",
 			"request": {
 				"method": "GET",
