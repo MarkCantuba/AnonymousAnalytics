@@ -55,6 +55,26 @@ def query_histogram_by_date_interval(
 ):
     start, end = validate_time_format(start, end)
 
+    filters = [
+        {
+            "range": {
+                "server_timestamp": {
+                    "gte": start,
+                    "lte": end
+                }
+            }
+        }
+    ]
+
+    if event_type is not None and event_type.strip() != "":
+        filters.append({
+            "wildcard": {
+                "event_type": {
+                    "value": "*{}*".format(event_type.strip())
+                }
+            }
+        })
+
     request_body = {
         "aggs": {
             "events_over_time": {
@@ -70,21 +90,10 @@ def query_histogram_by_date_interval(
         },
         "query": {
             "bool": {
-                "filter": [
-                    {"range": {"server_timestamp": {"gte": start, "lte": end}}}
-                ]
+                "filter": filters
             }
         },
         "size": 0
     }
-
-    if event_type is not None and event_type.strip() != "":
-        event_term = {
-            "regexp": {
-                "event_type":  ".*{}.*".format(event_type.lower())
-            }
-        }
-
-        request_body["query"]["bool"]["filter"].append(event_term)
 
     return elastic_sess.search(index=project_name, body=request_body)
