@@ -108,6 +108,7 @@ async def get_events_by_timestamp(
 async def get_histogram_by_date_interval(
         *,
         project_id: str = ProjectId,
+        event_type: Optional[str] = None,
         start: Optional[datetime] = None,
         end: Optional[datetime] = None,
         interval: Optional[int] = Query(21600, gt=0)
@@ -115,7 +116,7 @@ async def get_histogram_by_date_interval(
     if not await es.indices.exists(index=project_id):
         raise ElasticIndexNotFound(project_id)
 
-    response = await query_histogram_by_date_interval(es, project_id, start, end, interval)
+    response = await query_histogram_by_date_interval(es, project_id, event_type, start, end, interval)
 
     histogram_data = [
         event_count["doc_count"]

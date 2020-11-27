@@ -4,13 +4,10 @@ from elasticsearch import AsyncElasticsearch
 
 from exceptions import *
 
+from datetime import datetime, timezone
 
-def query_event_by_timestamp(
-        elastic_sess: AsyncElasticsearch,
-        project_name: str,
-        start: datetime,
-        end: datetime
-):
+
+def validate_time_format(start: datetime, end: datetime):
     if start is None:
         start = datetime.now(timezone.utc) - timedelta(days=7)
     if end is None:
@@ -22,6 +19,17 @@ def query_event_by_timestamp(
         raise InvalidTimestamp(start)
     if end.tzinfo != timezone.utc:
         raise InvalidTimestamp(end)
+
+    return start, end
+
+
+def query_event_by_timestamp(
+        elastic_sess: AsyncElasticsearch,
+        project_name: str,
+        start: datetime,
+        end: datetime
+):
+    start, end = validate_time_format(start, end)
 
     request_body = {
         "query": {
@@ -40,21 +48,32 @@ def query_event_by_timestamp(
 def query_histogram_by_date_interval(
         elastic_sess: AsyncElasticsearch,
         project_name: str,
+        event_type: str,
         start: datetime,
         end: datetime,
         interval: int
 ):
-    if start is None:
-        start = datetime.now(timezone.utc) - timedelta(days=7)
-    if end is None:
-        end = datetime.now(timezone.utc)
+    start, end = validate_time_format(start, end)
 
-    if start > end:
-        raise InvalidRange()
-    if start.tzinfo != timezone.utc:
-        raise InvalidTimestamp(start)
-    if end.tzinfo != timezone.utc:
-        raise InvalidTimestamp(end)
+    filters = [
+        {
+            "range": {
+                "server_timestamp": {
+                    "gte": start,
+                    "lte": end
+                }
+            }
+        }
+    ]
+
+    if event_type is not None and event_type.strip() != "":
+        filters.append({
+            "wildcard": {
+                "event_type": {
+                    "value": "*{}*".format(event_type.strip())
+                }
+            }
+        })
 
     request_body = {
         "aggs": {
@@ -70,11 +89,8 @@ def query_histogram_by_date_interval(
             }
         },
         "query": {
-            "range": {
-                "server_timestamp": {
-                    "gte": start,
-                    "lte": end
-                }
+            "bool": {
+                "filter": filters
             }
         },
         "size": 0
