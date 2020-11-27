@@ -134,13 +134,12 @@
 					}
 				},
 				"url": {
-					"raw": "http:/{{server_host}}/projects/{{project_id}}/events",
+					"raw": "http://{{server_host}}/projects/{{project_id}}/events",
+					"protocol": "http",
 					"host": [
-						"http"
+						"{{server_host}}"
 					],
-					"port": "",
 					"path": [
-						"{{server_host}}",
 						"projects",
 						"{{project_id}}",
 						"events"
