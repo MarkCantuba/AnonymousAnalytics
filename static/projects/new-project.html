@@ -10,44 +10,23 @@
         <script src="new-project.js"></script>
         <link rel="stylesheet" href="/normalize.css">
         <link rel="stylesheet" href="/base.css">
-        <style>
-            .page_navigation{
-                padding: -20px;
-            }
-            .breadcrumb_item{
-                display: inline-block;
-            }
-
-            .breadcrumb_item:not(:last-of-type)::after{
-                content:'>';
-                margin: 0 5px;
-
-            }
-
-        </style>
     </head>
     <body>
         <nav>
             <h1>New Project</h1>
         </nav>
-        <ul class="page_navigation">
-            <li class="breadcrumb_item">
-                <a href = "/welcome.html" class="breadcrumb_link">
-                    Home
-                </a>
-            </li>
-            <li class="breadcrumb_item">
-                <a href = "/projects/management.html" class="breadcrumb_link">
-                    Projects
-                </a>
-            </li>
-            <li class="breadcrumb_item">
-                <a href = "/new-project.html" class="breadcrumb_link">
-                    New Project
-                </a>
-            </li>
-        </ul>
         <main>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/welcome.html">Home</a>
+                </li>
+                <li>
+                    <a href="/projects/management.html">Projects</a>
+                </li>
+                <li>
+                    <a href="/projects/new-project.html">New Project</a>
+                </li>
+            </ul>
             <form id="new-project-form" novalidate>
                 <div class="input-group">
                     <label for="project-id">Project ID</label>
@@ -65,6 +44,5 @@
                 <button type="submit" class="btn primary form-submit">Create Project</button>
             </form>
         </main>
-
     </body>
 </html>

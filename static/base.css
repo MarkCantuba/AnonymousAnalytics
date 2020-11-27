@@ -138,3 +138,16 @@ a:active {
 .btn.primary:hover {
     background-color: var(--button-priamry-hover-color);
 }
+
+.breadcrumb {
+    padding: 0;
+}
+
+.breadcrumb > li {
+    display: inline-block;
+}
+
+.breadcrumb > li:not(:last-child)::after {
+    content: '>';
+    margin: 0 5px;
+}
