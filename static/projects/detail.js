@@ -44,25 +44,16 @@ function generateBarChart(data) {
 }
 
 window.addEventListener('DOMContentLoaded', e => {
-    d3.select('#project-name').text([PROJECT_ID]);
-
-    API_SERVICE.getEventCounts(PROJECT_ID, start, end, interval)
+    API_SERVICE.getProject(PROJECT_ID)
     .then(response => {
-        document.title = `${PROJECT_ID} - Project Detail`;
+        let project = response.data;
+        document.title = `${project.name} - Project Detail`;
         d3.select('.breadcrumb > li:last-child a')
-            .text(PROJECT_ID)
+            .text(project.name)
             .attr('href', `/projects/detail.html?project_id=${PROJECT_ID}`);
-        generateBarChart(response.data);
-    })
-    .catch(response => {
-        console.error(response);
-    });
+        d3.select('#project-name')
+            .text(project.name);
 
-    d3.select('#period-change').on('change', () => {
-        let recentDays = parseInt(d3.select('#period-change').property('value'));
-        interval = DEFAULT_RECENT_DAYS.find(s => s.recent === recentDays).interval;
-        end = luxon.DateTime.utc();
-        start = end.minus({days: recentDays});
         API_SERVICE.getEventCounts(PROJECT_ID, start, end, interval)
         .then(response => {
             generateBarChart(response.data);
@@ -70,5 +61,26 @@ window.addEventListener('DOMContentLoaded', e => {
         .catch(response => {
             console.error(response);
         });
+
+        d3.select('#period-change').on('change', () => {
+            let recentDays = parseInt(d3.select('#period-change').property('value'));
+            interval = DEFAULT_RECENT_DAYS.find(s => s.recent === recentDays).interval;
+            end = luxon.DateTime.utc();
+            start = end.minus({days: recentDays});
+            API_SERVICE.getEventCounts(PROJECT_ID, start, end, interval)
+            .then(response => {
+                generateBarChart(response.data);
+            })
+            .catch(response => {
+                console.error(response);
+            });
+        });
+    })
+    .catch(response => {
+        console.error(response);
+        d3.select('.breadcrumb > li:last-child a')
+            .text('Not Found');
+        d3.select('#project-name')
+            .text('Project Not Found');
     });
 });
