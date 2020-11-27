@@ -25,8 +25,12 @@ class APIService {
         return this.$axios.post('/projects', project);
     }
 
-    getProjcets() {
+    getProjects() {
         return this.$axios.get('/projects');
+    }
+
+    getProject(projectId) {
+        return this.$axios.get(`/projects/${projectId}`);
     }
 
     getEventCounts(projectId, start, end, interval) {

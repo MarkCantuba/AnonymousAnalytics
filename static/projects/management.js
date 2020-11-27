@@ -23,7 +23,7 @@ function constructProjectMarkup(projects) {
 }
 
 window.addEventListener('DOMContentLoaded', e => {
-    API_SERVICE.getProjcets()
+    API_SERVICE.getProjects()
     .then(response => {
         let projects = response.data;
         constructProjectMarkup(projects);
