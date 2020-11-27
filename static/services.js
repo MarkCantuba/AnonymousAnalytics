@@ -33,9 +33,10 @@ class APIService {
         return this.$axios.get(`/projects/${projectId}`);
     }
 
-    getEventCounts(projectId, start, end, interval) {
+    getEventCounts(projectId, eventType, start, end, interval) {
         return this.$axios.get(`/projects/${projectId}/events/counts`, {
             params: {
+                event_type: eventType ? eventType.trim() : null,
                 start: start.toISO(),
                 end: end.toISO(),
                 interval: interval

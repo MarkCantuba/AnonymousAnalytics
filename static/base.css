@@ -61,7 +61,7 @@ input[type="text"], textarea, select {
     font-family: inherit;
     font-size: inherit;
     line-height: 1.5;
-    padding: 6px;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
