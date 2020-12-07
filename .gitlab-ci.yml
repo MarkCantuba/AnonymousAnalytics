@@ -6,19 +6,10 @@ stages:
   - test
   - deploy
 
-# image: docker image? 
-# Where is the docker image? (elasticsearch server?)
-
 build_full:
   stage: build
   script: #actual commands need to be determined and formalize here
     - echo "Full build of the current dev statges."
-
-# Is the below step necessary?
-# build_on_top_full:
-#   stage: build
-#   script: #actual commands need to be determined and formalize here 
-#     - echo "Additional builds to catch missing details"
 
 test_unit:
   stage: test
@@ -31,14 +22,6 @@ test_integration:
   script: #actual commands need to be determined and formalize here 
     - echo "Once unit tests complete,"
     - echo "Start integration test after all unit tests passed."
-
-# Is the below step necessary?
-# deploy_test_production:
-#   tags: production
-#   stage: deploy
-#   script: #actual commands need to be determined and formalize here 
-#     - echo "Once integration test passed,"
-#     - echo "Start test production."
 
 deploy_prodcution:
   tags: production
