@@ -2,5 +2,5 @@ Test1:
      tags:
       - ci-regression
      script:
-      - cd C:\Gitlab-runner\builds\TojtbbJV\0\CMPT371-01-2020\anonymous-analytics\src
-      - pytest test_models.py
+      - source ~/.pyenv_init
+      - pytest src/test_models.py
